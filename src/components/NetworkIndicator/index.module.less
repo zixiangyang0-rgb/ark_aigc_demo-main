@@ -1,0 +1,133 @@
+/**
+ * Copyright 2025 Beijing Volcano Engine Technology Co., Ltd. All Rights Reserved.
+ * SPDX-license-identifier: BSD-3-Clause
+ *
+ * =============================================================
+ * 网络状态指示器组件样式文件
+ * =============================================================
+ *
+ * 【泛化描述】NetworkIndicator = Network Indicator（网络状态指示器）。
+ *            在 Header 右上角显示网络信号强度图标，
+ *            点击可查看详细的网络状态（延迟、丢包率等）。
+ *
+ * 【典型场景】
+ *   - 网络良好 → 显示绿色满格信号
+ *   - 网络一般 → 显示黄色 2 格信号
+ *   - 网络差   → 显示红色 1 格信号
+ *   - 点击图标 → 弹出详情面板（延迟、丢包率）
+ *
+ * 【字段具体含义】
+ *   .panel          → 详情面板容器（左右两栏：标签+值）
+ *   .label/.value   → 面板的左右两栏
+ *   .wrapper        → 信号指示器外层容器
+ *   .indicator      → 单根信号条
+ */
+
+.panel {
+    display: flex;  // 左右两栏布局
+
+    /**
+     * .label - 左栏（标签）
+     *
+     * 【功能说明】显示指标的名称
+     *
+     * 【典型场景】
+     * "网络状态"、"延迟"、"丢包率"等标签
+     *
+     * 【样式细节】
+     * - 固定宽度 90px
+     * - flex 纵向排列，子元素间距 4px
+     */
+    .label {
+        width: 90px;
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+
+        .state {
+            font-weight: bold;  // 加粗
+        }
+    }
+
+    /**
+     * .value - 右栏（值）
+     *
+     * 【功能说明】显示指标的数值
+     *
+     * 【典型场景】
+     * "正常"、"58ms"、"上行 2% 下行 1%" 等
+     */
+    .value {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+        width: max-content;
+
+        .state {
+            font-weight: bold;
+        }
+
+        /**
+         * .loss - 丢包率区域
+         *
+         * 【功能说明】显示上行和下行丢包率
+         *
+         * 【典型场景】
+         * 上行：↑ 2%  下行：↓ 1%
+         */
+        .loss {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            gap: 12px;
+        }
+    }
+}
+
+/**
+ * .wrapper - 信号指示器外层容器
+ *
+ * 【功能说明】承载三根信号条的容器
+ *
+ * 【样式细节】
+ * - 三根信号条垂直堆叠
+ * - 灰色半透明背景
+ * - 14x14px 的小方块
+ */
+.wrapper {
+    display: flex;
+    align-items: flex-end;  // 信号条底部对齐
+    height: 14px;
+    width: 14px;
+    margin: 14px;
+    column-gap: 1.5px;  // 信号条之间的间距
+    background-color: rgba(142, 142, 142, 0.05);  // 灰色半透明背景
+    border-radius: 3px;
+    padding: 2px;
+
+    /**
+     * .indicator - 单根信号条
+     *
+     * 【功能说明】一根信号条，表示网络强度的格数
+     *
+     * 【典型场景】
+     * 三根信号条，从下到上依次变高
+     * 网络好 → 三根都是绿色
+     * 网络一般 → 下面两根绿色，最上面灰色
+     * 网络差 → 只有最下面一根绿色
+     *
+     * 【样式细节】
+     * - 宽度 30%
+     * - 高度由 JS 动态控制（通过 CSS transition）
+     */
+    .indicator {
+        width: 30%;
+        border-color: rgba(127, 127, 127, 0.184);
+        border-width: 1px;
+        border-radius: 1px;
+        border-style: solid;
+        opacity: 0.8;
+        transition: height 0.3s;  // 高度变化时平滑过渡
+        box-sizing: border-box;
+    }
+}

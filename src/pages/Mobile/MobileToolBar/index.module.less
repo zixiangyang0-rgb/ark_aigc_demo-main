@@ -1,0 +1,153 @@
+/**
+ * Copyright 2025 Beijing Volcano Engine Technology Co., Ltd. All Rights Reserved.
+ * SPDX-license-identifier: BSD-3-Clause
+ *
+ * @file MobileToolBar/index.module.less
+ * @description 移动端工具栏样式文件
+ *
+ * ═══════════════════════════════════════════════════════════════════════════
+ * 【文件功能概述】
+ * 定义移动端工具栏（MobileToolBar）组件的样式，包括：
+ *   - 顶部工具栏容器
+ *   - 设置、全屏等操作按钮
+ *   - 字幕显示切换
+ *
+ * ═══════════════════════════════════════════════════════════════════════════
+ * 【典型使用场景】
+ * 1. 移动端设备顶部的操作工具栏
+ * 2. 全屏/退出全屏操作
+ * 3. 字幕开关
+ * 4. AI 设置快捷入口
+ *
+ * ═══════════════════════════════════════════════════════════════════════════
+ * 【字段具体含义】
+ * wrapper : 工具栏主容器，绝对定位在顶部
+ * setting : 设置按钮样式
+ * aiSetting : AI 设置按钮
+ * screen : 全屏按钮
+ * subtitle : 字幕按钮
+ * showSubTitle : 字幕开启状态
+ * ═══════════════════════════════════════════════════════════════════════════
+ */
+
+/**
+ * .wrapper - 工具栏主容器
+ *
+ * 【功能说明】
+ * 移动端顶部的操作工具栏容器。
+ *
+ * 【典型场景】
+ * 手机屏幕顶部的工具栏，包含多个操作按钮。
+ *
+ * 【样式细节】
+ * - 绝对定位在顶部
+ * - z-index: 2 确保在最上层
+ * - 16px 内边距
+ * - flex 两端对齐
+ */
+.wrapper {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px;
+  z-index: 2;
+  top: 0;
+  left: 0;
+  right: 0;
+  color: #42464e;
+  font-size: 16px;
+  font-weight: 500;
+
+  > div {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  /**
+   * .setting - 设置按钮
+   *
+   * 【功能说明】
+   * 点击后打开设置面板的按钮。
+   *
+   * 【典型场景】
+   * 圆形背景的设置图标按钮。
+   *
+   * 【样式细节】
+   * - 36px 正方形
+   * - 圆形
+   * - 白色背景
+   * - 50% 圆角
+   */
+  .setting {
+    background-color: #fff;
+    width: 36px;
+    height: 36px;
+    line-height: 28px;
+    border-radius: 50%;
+    text-align: center;
+    border: 0.5px solid #ffffff80;
+    cursor: pointer;
+    font-weight: 500;
+  }
+
+  /**
+   * .aiSetting - AI 设置按钮
+   *
+   * 【功能说明】
+   * 快速访问 AI 相关设置的按钮。
+   *
+   * 【典型场景】
+   * 胶囊形状的 AI 设置入口。
+   *
+   * 【样式细节】
+   * - 高度 36px
+   * - 左右 8px 内边距（形成胶囊）
+   * - 圆角 18px
+   */
+  .aiSetting {
+    background-color: #fff;
+    height: 36px;
+    border-radius: 18px;
+    line-height: 36px;
+    padding: 0 8px;
+    cursor: pointer;
+  }
+
+  /**
+   * .screen / .subtitle - 全屏/字幕按钮
+   *
+   * 【功能说明】
+   * 全屏切换和字幕开关按钮。
+   *
+   * 【典型场景】
+   * 胶囊形状的操作按钮。
+   *
+   * 【样式细节】
+   * - 与 aiSetting 样式一致
+   */
+  .screen,
+  .subtitle {
+    cursor: pointer;
+    background-color: #fff;
+    height: 36px;
+    border-radius: 18px;
+    line-height: 36px;
+    padding: 0 8px;
+  }
+
+  /**
+   * .showSubTitle - 字幕开启状态
+   *
+   * 【功能说明】
+   * 字幕功能开启时的特殊样式。
+   *
+   * 【典型场景】
+   * 用户打开字幕后，按钮变为紫色高亮。
+   */
+  .showSubTitle {
+    background: #9474ff;
+    color: #fff;
+  }
+}

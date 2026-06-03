@@ -1,0 +1,570 @@
+/**
+ * Copyright 2025 Beijing Volcano Engine Technology Co., Ltd. All Rights Reserved.
+ * SPDX-license-identifier: BSD-3-Clause
+ *
+ * @file MainArea/index.module.less
+ * @description 主对话区域样式文件
+ *
+ * ═══════════════════════════════════════════════════════════════════════════
+ * 【文件功能概述】
+ * 定义主对话区域（MainArea）的样式，包括：
+ *   - 欢迎信息和提示文字
+ *   - 对话记录容器和消息气泡
+ *   - AI 状态指示器和麦克风通知
+ *   - 中断标签和重新开启按钮
+ *
+ * ═══════════════════════════════════════════════════════════════════════════
+ * 【典型使用场景】
+ * 1. AI 初始化时的欢迎界面
+ * 2. 用户开始说话时的语音波形动画
+ * 3. AI 生成回复时的打字效果和加载动画
+ * 4. 对话结束后的状态展示
+ * 5. 麦克风断开后的重新连接提示
+ *
+ * ═══════════════════════════════════════════════════════════════════════════
+ * 【字段具体含义】
+ * wrapper : 外层容器，白色背景带圆角和内边距
+ * space : 垂直间距元素，用于元素间留白
+ * doubaoIcon : AI 头像图标容器
+ * interruptTag : 中断标签，显示在消息旁
+ * welcome : 欢迎语标题
+ * weight : 渐变文字效果
+ * tip : 提示文字，说明功能或使用方式
+ * conversation : 对话记录滚动容器
+ * sentence/user/robot : 单条消息及其气泡样式
+ * status : 底部状态区域
+ * ═══════════════════════════════════════════════════════════════════════════
+ */
+
+/**
+ * .wrapper - 主区域容器
+ *
+ * 【功能说明】
+ * 作为对话区域的根容器，设定整体尺寸和背景样式。
+ *
+ * 【典型场景】
+ * 页面加载后，用户看到的白色主区域，顶部有欢迎信息。
+ *
+ * 【样式细节】
+ * - 白色背景，1px 边框，16px 圆角
+ * - 左右 padding 为 12.5%，上下为 20px
+ */
+.wrapper {
+  width: 100%;
+  height: 100%;
+  background-color: white;
+  border: 1px solid var(--line-color-border-2, rgba(234, 237, 241, 1));
+  border-radius: 16px;
+  padding: 20px 12.5%;
+
+  /**
+   * .space - 垂直间距块
+   *
+   * 【功能说明】
+   * 用于在元素之间创建垂直间距，提供视觉分隔。
+   *
+   * 【典型场景】
+   * 欢迎语与头像之间、对话区与底部状态之间需要留白时使用。
+   *
+   * 【样式细节】
+   * - 最小高度 40px
+   * - 宽度 100%
+   */
+  .space {
+    width: 100%;
+    min-height: 40px;
+  }
+
+  /**
+   * .doubaoIcon - AI 头像图标
+   *
+   * 【功能说明】
+   * 承载 AI 数字人形象的圆形图标区域。
+   *
+   * 【典型场景】
+   * 欢迎页面中心显示的 AI 角色头像，用户可以直观看到当前 AI。
+   *
+   * 【样式细节】
+   * - 111px 正方形区域
+   * - overflow: hidden 防止内容溢出
+   */
+  .doubaoIcon {
+    width: 111px;
+    height: 111px;
+    min-height: 111px;
+    overflow: hidden;
+  }
+
+  /**
+   * .interruptTag - 中断标签
+   *
+   * 【功能说明】
+   * 当 AI 被用户中断时显示的提示标签。
+   *
+   * 【典型场景】
+   * 用户点击中断按钮后，在消息流中显示此标签，表明 AI 已停止生成。
+   *
+   * 【样式细节】
+   * - 紧凑的圆角矩形
+   * - 灰色背景和文字，使用 CSS 变量便于主题适配
+   */
+  .interruptTag {
+    width: max-content;
+    height: 22px;
+    padding: 0px 6px 0px 6px;
+    border-radius: 4px;
+    margin-left: 4px;
+    font-family: PingFang SC;
+    font-size: 12px;
+    font-weight: 400;
+    line-height: 22px;
+    letter-spacing: 0.003em;
+    color: var(--text-color-text-3, rgba(115, 122, 135, 1));
+    background: var(--security-unknown-tag-unknown-1, rgba(241, 243, 245, 1));
+  }
+
+  /**
+   * .welcome - 欢迎语标题
+   *
+   * 【功能说明】
+   * 页面顶部显示的欢迎语，如"Hi，有什么可以帮助你的？"
+   *
+   * 【典型场景】
+   * 用户首次进入或对话结束时显示，引导用户开始交互。
+   *
+   * 【样式细节】
+   * - 24px 字号，500 字重
+   * - 左对齐，与头像左侧平齐
+   */
+  .welcome {
+    font-family: PingFang SC;
+    font-size: 24px;
+    font-weight: 500;
+    line-height: 32px;
+    letter-spacing: 0.003em;
+    text-align: left;
+    margin-top: 8px;
+  }
+
+  /**
+   * .weight - 渐变文字效果
+   *
+   * 【功能说明】
+   * 为文字添加渐变色效果，通常用于强调重要词汇或品牌名称。
+   *
+   * 【典型场景】
+   * "火山引擎"等品牌名称使用蓝色到紫色的渐变效果。
+   *
+   * 【样式细节】
+   * - 蓝色 (#004FFF) 到紫色 (#9865FF) 渐变
+   * - 使用 background-clip: text 实现文字填充效果
+   */
+  .weight {
+    background: linear-gradient(90deg, #004FFF 38.86%, #9865FF 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  /**
+   * .tip - 提示文字
+   *
+   * 【功能说明】
+   * 显示功能说明或使用提示，帮助用户了解如何操作。
+   *
+   * 【典型场景】
+   * "长按空格键说话"等操作提示，灰色半透明文字。
+   *
+   * 【样式细节】
+   * - 13px 字号，灰色文字
+   * - 上下间距 18px
+   */
+  .tip {
+    font-family: PingFang SC;
+    font-size: 13px;
+    font-weight: 400;
+    line-height: 22px;
+    letter-spacing: 0.003em;
+    text-align: left;
+    color: rgba(27, 30, 61, 0.6);
+    margin-top: 18px;
+    margin-bottom: 18px;
+  }
+
+  /**
+   * .tagProblem - 问题标签
+   *
+   * 【功能说明】
+   * 显示推荐的问题或快捷操作选项。
+   *
+   * 【典型场景】
+   * AI 准备好后，底部显示可点击的问题建议供用户选择。
+   *
+   * 【样式细节】
+   * - 紧凑的圆角矩形
+   * - 12px 字号，深色文字
+   */
+  .tagProblem {
+    width: max-content;
+    border-radius: 4px;
+    font-family: PingFang SC;
+    font-size: 12px;
+    font-weight: 500;
+    line-height: 20px;
+    letter-spacing: 0.003em;
+    text-align: center;
+    margin-bottom: 12px;
+    color: rgba(66, 70, 78, 1);
+  }
+
+  /**
+   * .conversation - 对话记录容器
+   *
+   * 【功能说明】
+   * 承载所有对话消息的滚动容器，包括用户消息和 AI 回复。
+   *
+   * 【典型场景】
+   * 对话过程中，消息不断添加，用户可以滚动查看历史记录。
+   *
+   * 【样式细节】
+   * - 高度为 75% 减去 12px
+   * - flex 纵向布局
+   * - 隐藏滚动条（通过伪元素）
+   */
+  .conversation {
+    overflow-x: hidden;
+    overflow-y: auto;
+    width: 100%;
+    position: relative;
+    height: calc(75% - 12px);
+    display: flex;
+    flex-direction: column;
+    padding-bottom: 12px;
+
+    /**
+     * .aiReadying - AI 正在阅读/处理状态
+     *
+     * 【功能说明】
+     * 当 AI 正在处理用户输入或生成回复时显示的文字。
+     *
+     * 【典型场景】
+     * 用户发送消息后，AI 正在思考时显示"AI 正在阅读..."
+     *
+     * 【样式细节】
+     * - 16px 字号，居中显示
+     * - 左侧带有加载动画图标
+     */
+    .aiReadying {
+      font-family: PingFang SC;
+      font-size: 16px;
+      font-weight: 500;
+      line-height: 18px;
+      letter-spacing: 0.003em;
+      color: rgba(27, 30, 61, 0.6);
+      margin-top: 12px;
+      text-align: center;
+      display: flex;
+      flex-direction: row;
+      justify-content: flex-start;
+      align-items: center;
+    }
+
+    /**
+     * .aiReading-spin - 加载动画图标
+     *
+     * 【功能说明】
+     * AI 处理状态前的旋转/脉冲加载动画。
+     *
+     * 【典型场景】
+     * 与 aiReadying 配合使用，增强加载状态的视觉反馈。
+     *
+     * 【样式细节】
+     * - 右侧间距 12px
+     */
+    .aiReading-spin {
+      margin-right: 12px;
+    }
+  }
+
+  /**
+   * .conversation 滚动条样式 - 隐藏原生滚动条
+   * 保持视觉一致性，隐藏 webkit 浏览器的滚动条
+   */
+  .conversation::-webkit-scrollbar {
+    width: 0px;
+    height: 0px;
+  }
+  
+  .conversation::-webkit-scrollbar-thumb {
+    background: rgba(0,0,0,0);
+    border-radius: 0px;
+  }
+  
+  .conversation::-webkit-scrollbar-track {
+    background: rgba(0,0,0,0);
+    border-radius: 0px;
+  }
+
+  /**
+   * .sentence - 单条消息容器
+   *
+   * 【功能说明】
+   * 单条对话消息的外层容器，包含用户或 AI 的消息内容。
+   *
+   * 【典型场景】
+   * 用户发送"你好"后，显示一行包含用户头像和消息气泡的内容。
+   *
+   * 【样式细节】
+   * - flex 横向布局
+   * - 左对齐，元素垂直居中
+   */
+  .sentence {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+    width: 100%;
+  }
+
+  /**
+   * .user - 用户消息气泡
+   *
+   * 【功能说明】
+   * 用户发送的消息显示样式，通常为灰色背景。
+   *
+   * 【典型场景】
+   * 用户说"帮我查一下天气"，显示在对话区右侧。
+   *
+   * 【样式细节】
+   * - 圆角气泡样式（右上角直角，其他圆角）
+   * - 灰色背景 (#f1f3f5)
+   * - 自动宽度，根据内容伸展
+   */
+  .user {
+    width: max-content;
+    border: 0px solid;
+    align-self: flex-end;
+    padding: 8px 12px 8px 12px;
+    border-radius: 12px 0px 12px 12px;
+    background: var(--background-color-bg-5, rgba(241, 243, 245, 1));
+    margin-top: 12px;
+  }
+
+  /**
+   * .robot - AI 消息气泡
+   *
+   * 【功能说明】
+   * AI 回复的消息显示样式，通常为白色或渐变边框。
+   *
+   * 【典型场景】
+   * AI 回答"今天是晴天，气温 25 度"，显示在对话区。
+   *
+   * 【样式细节】
+   * - 14px 字号
+   * - 左对齐显示
+   */
+  .robot {
+    font-family: PingFang SC;
+    font-size: 14px;
+    font-weight: 400;
+    letter-spacing: 0.003em;
+
+    border: 0px solid;
+    align-self: flex-start;
+    padding: 3px 12px 3px 0px;
+  }
+
+  /**
+   * .userTalkingWave - 用户说话时的语音波形
+   *
+   * 【功能说明】
+   * 用户按住说话键时，显示的语音输入动画。
+   *
+   * 【典型场景】
+   * 用户长按空格键说话时，界面显示动态波形表示正在录音。
+   *
+   * 【样式细节】
+   * - 固定 100px 高度
+   */
+  .userTalkingWave {
+    height: 100px;
+  }
+
+  /**
+   * .userStopTalkingWave - 用户停止说话后的波形
+   *
+   * 【功能说明】
+   * 用户松开说话键后，波形缩小表示录音结束。
+   *
+   * 【典型场景】
+   * 用户说完话松开按键，波形从大变小动画过渡。
+   *
+   * 【样式细节】
+   * - 缩小到原来的 50%
+   */
+  .userStopTalkingWave {
+    height: 100px;
+    transform: scaleY(.5);
+  }
+
+  /**
+   * .status - 底部状态区域
+   *
+   * 【功能说明】
+   * 显示当前系统状态，如麦克风状态、连接状态等。
+   *
+   * 【典型场景】
+   * 1. 显示"长按空格键说话"的提示
+   * 2. 显示麦克风开启/关闭状态图标
+   * 3. 显示网络连接质量指示
+   *
+   * 【样式细节】
+   * - 固定在底部
+   * - flex 纵向排列
+   * - 占据 25% 高度
+   */
+  .status {
+    overflow: hidden;
+    width: 100%;
+    height: 25%;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 8px;
+
+    /**
+     * .status-row - 状态行
+     *
+     * 【功能说明】
+     * 包含状态图标和状态文字的单行元素。
+     *
+     * 【典型场景】
+     * [麦克风图标] "长按空格键说话"
+     */
+    .status-row {
+      display: flex;
+      flex-direction: row;
+      justify-content: center;
+      align-items: center;
+
+      .status-icon {
+        width: 24px;
+        height: 24px;
+        margin-right: 6px;
+      }
+
+      .status-text {
+        font-family: PingFang SC;
+        font-size: 14px;
+        font-weight: 500;
+        line-height: 22px;
+        letter-spacing: 0.003em;
+      }
+    }
+
+    /**
+     * .desc - 状态描述文字
+     *
+     * 【功能说明】
+     * 状态的详细说明，如具体操作方式。
+     *
+     * 【典型场景】
+     * "点击开始对话"等次要提示信息。
+     */
+    .desc {
+      font-family: PingFang SC;
+      font-size: 10px;
+      font-weight: 400;
+      line-height: 18px;
+      letter-spacing: 0.003em;
+      text-align: center;
+      color: var(--text-color-text-4, rgba(199, 204, 214, 1));
+    }
+
+    /**
+     * .micNotify - 麦克风通知容器
+     *
+     * 【功能说明】
+     * 承载麦克风状态和重新开启按钮的区域。
+     */
+    .micNotify {
+      display: flex;
+      flex-direction: row;
+      justify-content: center;
+      align-items: center;
+    }
+
+    /**
+     * .micReopen - 重新开启麦克风按钮
+     *
+     * 【功能说明】
+     * 当麦克风意外断开时，提供重新连接的操作按钮。
+     *
+     * 【典型场景】
+     * 麦克风权限丢失或设备断开后，显示此按钮让用户重新授权。
+     */
+    .micReopen {
+      position: relative;
+      width: 107px;
+      height: 40px;
+      padding: 5px 16px 5px 16px;
+      margin-left: 12px;
+      margin-right: 12px;
+      background-clip: padding-box;
+      border-radius: 12px;
+
+      &:hover,
+      &:active,
+      &:focus {
+        opacity: 1;
+        color: rgba(0, 0, 0, 0.85);
+        border-color: #d9d9d9;
+      }
+    }
+  }
+
+  /**
+   * .interrupt - 中断按钮
+   *
+   * 【功能说明】
+   * 允许用户在 AI 生成回复过程中途停止的按钮。
+   *
+   * 【典型场景】
+   * AI 正在生成一段很长的回复，用户想中断并重新提问。
+   *
+   * 【样式细节】
+   * - 带阴影的圆角矩形
+   * - 可点击，带图标
+   */
+  .interrupt {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    margin-top: 12px;
+    width: max-content;
+    line-height: 28px;
+    padding: 1px 6px 1px 6px;
+    border-radius: 4px;
+    margin-left: 4px;
+    font-family: PingFang SC;
+    font-size: 12px;
+    font-weight: 400;
+    letter-spacing: 0.003em;
+    text-align: left;
+    box-shadow: 0px 0px 0px 1px rgba(221, 226, 233, 1);
+    color: var(--text-color-text-3, rgba(115, 122, 135, 1));
+
+    &:hover,
+    &:active,
+    &:focus {
+      opacity: 1;
+      border-color: #d9d9d9;
+    }
+
+    img {
+      margin-right: 8px;
+    }
+  }
+}

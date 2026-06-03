@@ -1,0 +1,132 @@
+/**
+ * Copyright 2025 Beijing Volcano Engine Technology Co., Ltd. All Rights Reserved.
+ * SPDX-license-identifier: BSD-3-Clause
+ *
+ * =============================================================
+ * AI 场景选择卡片组件样式文件
+ * =============================================================
+ *
+ * 【泛化描述】AIChangeCard = AI Change Card（AI 选择卡片）。
+ *            这是入场页的场景选择卡片组件样式，
+ *            用于显示 AI 头像、名称、描述，以及可选的场景标签。
+ *
+ * 【典型场景】
+ *   - 入场页显示所有可选的 AI 场景
+ *   - 选中某个场景后，卡片显示选中样式
+ *   - 场景超过配额时，显示渐变文字提示
+ *
+ * 【字段具体含义】
+ *   .card              → 卡片主容器
+ *   .avatar            → AI 头像容器（圆形渐变背景）
+ *   .title             → AI 名称文字
+ *   .desc              → AI 描述文字
+ *   .exceededTitle     → 超出配额时的渐变提示文字
+ *   .sceneContainer     → 场景选项列表容器
+ */
+
+.card {
+  position: relative;
+  text-align: center;
+  text-align: center;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 24px;
+
+  /**
+   * .avatar - AI 头像容器
+   *
+   * 【功能说明】承载 AI 头像图片的圆形容器
+   *
+   * 【典型场景】
+   * 显示 AI 数字人的照片或图标
+   *
+   * 【样式细节】
+   * - 128px 圆形
+   * - 渐变背景：浅蓝色渐变
+   */
+  .avatar {
+    img {
+      width: 128px;
+      height: 128px;
+    }
+    border-radius: 50%;
+    width: 128px;
+    height: 128px;
+    background: linear-gradient(180deg, #c3e4ff 0%, #98d6fe 100%);
+  }
+
+  /**
+   * .title - AI 名称
+   *
+   * 【功能说明】显示 AI 角色的名称
+   *
+   * 【典型场景】
+   * 显示"懂小智"、"自定义助手"等名称
+   */
+  .title {
+    font-weight: 500;
+    font-size: 24px;
+    line-height: 32px;
+    color: #1d2129;
+  }
+
+  /**
+   * .desc - AI 描述
+   *
+   * 【功能说明】显示 AI 角色的简短描述
+   *
+   * 【典型场景】
+   * 显示"支持豆包 Vision 模型和深度思考模型"等描述
+   */
+  .desc {
+    margin-top: 8px;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 22px;
+    color: #737a87;
+  }
+
+  /**
+   * .exceededTitle - 超出配额提示
+   *
+   * 【功能说明】超出配额时的渐变提示文字
+   *
+   * 【典型场景】
+   * 免费次数用尽时，显示渐变文字引导用户获取更多
+   *
+   * 【样式细节】
+   * 蓝紫渐变文字，渐变方向从左到右
+   */
+  .exceededTitle {
+    font-weight: 500;
+    font-size: 24px;
+    line-height: 32px;
+    background: linear-gradient(77.86deg, #3b91ff -3.23%, #0d5eff 51.11%, #c069ff 98.65%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    cursor: pointer;
+    img {
+      margin-left: 4px;
+    }
+  }
+
+  /**
+   * .sceneContainer - 场景选项列表
+   *
+   * 【功能说明】承载多个场景选择卡片的容器
+   *
+   * 【典型场景】
+   * 水平排列多个 AI 场景选项，支持换行
+   */
+  .sceneContainer {
+    display: flex;
+    flex-wrap: wrap;  // 超出自动换行
+    gap: 8px;
+    justify-content: center;
+    width: max-content;
+  }
+}

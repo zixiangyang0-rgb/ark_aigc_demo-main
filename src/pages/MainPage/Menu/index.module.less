@@ -1,0 +1,444 @@
+/**
+ * Copyright 2025 Beijing Volcano Engine Technology Co., Ltd. All Rights Reserved.
+ * SPDX-license-identifier: BSD-3-Clause
+ *
+ * @file Menu/index.module.less
+ * @description 菜单侧边栏样式文件
+ *
+ * ═══════════════════════════════════════════════════════════════════════════
+ * 【文件功能概述】
+ * 定义右侧菜单（Menu）组件的样式，包括：
+ *   - AI 角色信息卡片（头像、名称、描述）
+ *   - 推荐问题列表
+ *   - 设备控制区域
+ *   - 功能按钮（获取更多、设置等）
+ *   - 重置计时器显示
+ *
+ * ═══════════════════════════════════════════════════════════════════════════
+ * 【典型使用场景】
+ * 1. 显示当前 AI 角色的详细信息和头像
+ * 2. 展示可点击的推荐问题快速入口
+ * 3. 控制设备（麦克风、摄像头等）的开关状态
+ * 4. 显示服务使用时长或配额信息
+ * 5. 移动端摄像头的独立展示区域
+ *
+ * ═══════════════════════════════════════════════════════════════════════════
+ * 【字段具体含义】
+ * wrapper : 主容器，固定宽度 210px
+ * info : AI 角色信息区域
+ * title/desc/bold/gray : 不同层级的文字样式
+ * buttonArea : 按钮区域
+ * questions : 推荐问题列表
+ * device : 设备控制区
+ * box : 通用卡片容器
+ * resetTime : 重置时间显示
+ * tagWrapper : 标签包装器
+ * mobile-camera-wrapper : 移动端摄像头容器
+ * ═══════════════════════════════════════════════════════════════════════════
+ */
+
+/**
+ * .wrapper - 菜单主容器
+ *
+ * 【功能说明】
+ * 右侧菜单的根容器，固定宽度，包含所有菜单项。
+ *
+ * 【典型场景】
+ * 页面右侧 200px 宽的菜单栏，显示 AI 信息和问题建议。
+ *
+ * 【样式细节】
+ * - 固定宽度 210px
+ * - 高度 100%
+ * - 16px 圆角
+ * - flex 纵向居中布局
+ */
+ .wrapper {
+  width: 210px;
+  height: 100%;
+  border-radius: 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  /**
+   * .info - AI 角色信息区域
+   *
+   * 【功能说明】
+   * 承载 AI 头像、名称、描述等核心信息。
+   *
+   * 【典型场景】
+   * 显示当前 AI 数字人的形象和简短介绍。
+   */
+  .info {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+
+    /**
+     * .title - 标题文字
+     *
+     * 【功能说明】
+     * AI 角色的名称或功能标题。
+     *
+     * 【典型场景】
+     * "智能助手"、"数字人小慧"等名称。
+     */
+    .title {
+      font-weight: 500;
+      font-size: 14px;
+      line-height: 22px;
+      color: #0c0d0e;
+    }
+
+    /**
+     * .desc - 描述文字
+     *
+     * 【功能说明】
+     * AI 角色的简短描述或状态说明。
+     *
+     * 【典型场景】
+     * 显示 AI 的功能特点或当前状态。
+     *
+     * 【样式细节】
+     * - 横向排列，图标和文字对齐
+     * - 灰色中等字号
+     */
+    .desc {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      line-height: 20px;
+      color: #737a87;
+
+      :global {
+        div.arco-typography, p.arco-typography {
+          margin-bottom: 0px;
+        }
+      }
+    }
+
+    /**
+     * .bold - 加粗文字
+     *
+     * 【功能说明】
+     * 需要强调的信息文字。
+     *
+     * 【典型场景】
+     * 重要数值的显示，如使用次数等。
+     */
+    .bold {
+      font-size: 13px;
+      font-weight: 500;
+      line-height: 22px;
+      color: var(--text-color-text-1, rgba(12, 13, 14, 1));
+    }
+
+    /**
+     * .gray - 灰色辅助文字
+     *
+     * 【功能说明】
+     * 次要信息或辅助说明文字。
+     *
+     * 【典型场景】
+     * 配合主信息显示的标签或指标。
+     *
+     * 【样式细节】
+     * - 灰色文字
+     * - 包含一个 value 子元素占位值
+     */
+    .gray {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      font-size: 13px;
+      font-weight: 400;
+      line-height: 22px;
+      color: var(--text-color-text-3, rgba(115, 122, 135, 1));
+
+      .value {
+        width: 65%;
+        font-size: 12px;
+        font-weight: 500;
+        margin-left: 5px;
+      }
+
+      :global {
+        .arco-typography {
+          margin-bottom: 0px;
+          display: inline-block;
+          color: #737a87;
+        }
+      }
+    }
+
+    /**
+     * .buttonArea - 按钮区域
+     *
+     * 【功能说明】
+     * 承载操作按钮的容器，如"获取更多"等。
+     *
+     * 【典型场景】
+     * 底部包含主要操作按钮的区域。
+     *
+     * 【样式细节】
+     * - flex 横向布局
+     * - 元素两端对齐
+     */
+    .buttonArea {
+      width: 100%;
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: 8px;
+
+      /**
+       * .getMore - 主要操作按钮
+       *
+       * 【功能说明】
+       * 获取更多次数或服务的核心按钮。
+       *
+       * 【典型场景】
+       * 当免费次数用尽时，引导用户获取更多调用次数。
+       *
+       * 【样式细节】
+       * - 渐变背景（蓝色到紫色渐变）
+       * - 36px 高度
+       * - 6px 圆角
+       * - 渐变效果使用多层 radial-gradient 叠加
+       */
+      .getMore {
+        width: 100%;
+        color: #fff;
+        height: 36px;
+        text-shadow: none;
+        box-shadow: none;
+        border: none;
+        text-align: center;
+        background: linear-gradient(56.59deg, #3c73ff 15.53%, #6e41ee 62.28%, #d641ee 90.32%),
+          radial-gradient(
+            203.56% 121.74% at 27.12% -21.74%,
+            rgba(82, 182, 255, 0.2) 0%,
+            rgba(143, 65, 238, 0) 100%
+          ),
+          radial-gradient(
+            134.75% 51.95% at 26.69% 5.8%,
+            rgba(157, 214, 255, 0.1) 0%,
+            rgba(143, 65, 238, 0) 100%
+          ),
+          radial-gradient(
+            82.39% 83.92% at 147.46% 76.45%,
+            rgba(82, 99, 255, 0.8) 0%,
+            rgba(143, 65, 238, 0) 100%
+          );
+        border-radius: 6px;
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
+
+        color: var(--Primary-Neutral-0, #fff);
+        text-align: center;
+
+        /* Body/body-2 medium */
+        font-family: 'PingFang SC';
+        font-size: 13px;
+        font-style: normal;
+        font-weight: 500;
+        cursor: pointer;
+      }
+
+      .getMore:hover {
+        opacity: 0.9;
+      }
+
+      .getMore:active {
+        opacity: 1;
+      }
+
+      .getMore[disabled],
+      .getMore[disabled]:hover {
+        color: #fff;
+        background: linear-gradient(95.87deg, #1664ff 0%, #8040ff 97.7%);
+        opacity: 0.8;
+      }
+    }
+  }
+
+  /**
+   * .questions - 推荐问题列表
+   *
+   * 【功能说明】
+   * 显示可点击的快捷问题入口。
+   *
+   * 【典型场景】
+   * AI 准备好后，显示几个常见问题供用户快速选择。
+   */
+  .questions {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+
+    .title {
+      font-size: 13px;
+      font-weight: 500;
+      line-height: 22px;
+    }
+
+    /**
+     * .line - 问题条目
+     *
+     * 【功能说明】
+     * 单个可点击的问题选项。
+     *
+     * 【典型场景】
+     * "今天天气怎么样？"等快捷问题。
+     *
+     * 【样式细节】
+     * - 鼠标悬停显示手型光标
+     * - 灰色文字，深色可点击
+     */
+    .line {
+      font-size: 12px;
+      font-weight: 400;
+      line-height: 20px;
+      color: rgba(66, 70, 78, 1);
+      cursor: pointer;
+    }
+  }
+
+  /**
+   * .device - 设备控制区域
+   *
+   * 【功能说明】
+   * 承载设备控制开关的区域，如麦克风、摄像头等。
+   *
+   * 【典型场景】
+   * 控制本地设备开关状态的区域。
+   */
+  .device {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  /**
+   * .box - 通用卡片容器
+   *
+   * 【功能说明】
+   * 通用的卡片样式包装器，带边框和圆角。
+   *
+   * 【典型场景】
+   * 信息卡片、设备控制卡片等。
+   *
+   * 【样式细节】
+   * - 白色背景
+   * - 1px 边框
+   * - 16px 圆角
+   */
+  .box {
+    position: relative;
+    width: 100%;
+    border-radius: 16px;
+    background-color: white;
+    border: 1px solid var(--line-color-border-2, rgba(234, 237, 241, 1));
+    padding: 16px 24px 16px 24px;
+    box-sizing: border-box;
+    margin-bottom: 16px;
+  }
+
+  /**
+   * .resetTime - 重置时间显示
+   *
+   * 【功能说明】
+   * 显示服务配额重置的倒计时或时间点。
+   *
+   * 【典型场景】
+   * "每天 00:00 重置"或"剩余 X 次"等提示。
+   */
+  .resetTime {
+    position: relative;
+    width: 100%;
+    border-radius: 16px;
+    padding: 0px 24px 8px 24px;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+
+    /**
+     * .normalLine - 普通提示文字
+     *
+     * 【功能说明】
+     * 简洁的状态说明文字。
+     */
+    .normalLine {
+      color: #42464e;
+      /* Body/body-1 regular */
+      font-family: 'PingFang SC';
+      font-size: 12px;
+      font-style: normal;
+      font-weight: 400;
+      line-height: 20px; /* 166.667% */
+      letter-spacing: 0.036px;
+      opacity: 0.8;
+    }
+  }
+
+  /**
+   * .tagWrapper - 标签包装器
+   *
+   * 【功能说明】
+   * 包装多个标签/徽章的容器。
+   *
+   * 【典型场景】
+   * 显示功能标签列表，支持自动换行。
+   */
+  .tagWrapper {
+    margin-top: 12px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+  }
+}
+
+/**
+ * .mobile-camera-wrapper - 移动端摄像头容器
+ *
+ * 【功能说明】
+ * 移动设备上独立显示摄像头的区域。
+ *
+ * 【典型场景】
+ * 手机上摄像头的独立展示区域。
+ *
+ * 【样式细节】
+ * - 全宽显示
+ * - 居中布局
+ */
+.mobile-camera-wrapper {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  border-radius: 16px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 16px;
+
+  .mobile-camera {
+    position: relative !important;
+    width: 100% !important;
+    height: 100% !important;
+    top: auto !important;
+    right: auto !important;
+  }
+}

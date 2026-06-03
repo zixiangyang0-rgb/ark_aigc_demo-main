@@ -1,0 +1,55 @@
+<!--
+ * Copyright 2025 Beijing Volcano Engine Technology Co., Ltd. All Rights Reserved.
+ * SPDX-license-identifier: BSD-3-Clause
+ -->
+<!DOCTYPE html>
+<html lang="zh">
+  <head>
+    <meta charset="utf-8" />
+    <!--
+     * meta viewport：响应式设计必备
+     * width=device-width  → 宽度等于设备宽度
+     * initial-scale=1    → 初始缩放比例为 1（不缩放）
+     -->
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <!--
+     * meta theme-color：浏览器地址栏颜色（仅部分浏览器支持）
+     -->
+    <meta name="theme-color" content="#000000" />
+    <!--
+     * meta description：SEO 描述
+     -->
+    <meta name="description" content="volc video demo" />
+    <!--
+     * link favicon：网站图标
+     * %PUBLIC_URL% 在构建时会被替换为 public 文件夹的路径
+     -->
+    <link rel="icon" href="/favicon.png" />
+    <!--
+     * 注意：%PUBLIC_URL% 的使用
+     * 只有 public 文件夹下的文件才能被 HTML 引用
+     * 使用 "/favicon.ico" 或 "%PUBLIC_URL%/favicon.ico" 都可以
+     * 这两种写法在 SPA（单页应用）和非根路径部署时都能正常工作
+     -->
+    <title>火山引擎 RTC 实时对话式 AI 体验 Demo ——— 支持 DeepSeek 和 豆包视觉理解模型</title>
+  </head>
+  <body>
+    <!--
+     * noscript：如果用户禁用了 JavaScript，显示此提示
+     -->
+    <noscript>You need to enable JavaScript to run this app.</noscript>
+    <!--
+     * root：React 应用的挂载点
+     * JavaScript 会将整个应用渲染到这个 div 中
+     -->
+    <div id="root"></div>
+    <!--
+     * 此文件是一个模板
+     * 如果直接在浏览器打开，会看到一个空白页面
+     * 构建时，React 会将打包后的脚本插入到 <body> 标签中
+     *
+     * 开发模式：npm start 或 yarn start
+     * 生产构建：npm run build 或 yarn build
+     -->
+  </body>
+</html>

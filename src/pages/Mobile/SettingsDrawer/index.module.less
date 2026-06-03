@@ -1,0 +1,171 @@
+/**
+ * Copyright 2025 Beijing Volcano Engine Technology Co., Ltd. All Rights Reserved.
+ * SPDX-license-identifier: BSD-3-Clause
+ *
+ * @file SettingsDrawer/index.module.less
+ * @description 移动端设置抽屉样式文件
+ *
+ * ═══════════════════════════════════════════════════════════════════════════
+ * 【文件功能概述】
+ * 定义移动端设置抽屉（SettingsDrawer）组件的样式，包括：
+ *   - 设置页面整体布局
+ *   - 设置分组样式
+ *   - 退出登录按钮
+ *   - 版本信息
+ *
+ * ═══════════════════════════════════════════════════════════════════════════
+ * 【典型使用场景】
+ * 1. 移动端设备的设置页面
+ * 2. 从屏幕边缘滑出的设置面板
+ * 3. 应用设置和账户管理
+ *
+ * ═══════════════════════════════════════════════════════════════════════════
+ * 【字段具体含义】
+ * settingsPage : 设置页面主容器
+ * settingsGroup : 设置分组
+ * logoutButtonContainer : 退出按钮容器
+ * logoutButton : 退出登录按钮
+ * versionInfo : 版本信息
+ * copyLinkText : 复制链接文字
+ * ═══════════════════════════════════════════════════════════════════════════
+ */
+
+/**
+ * .settingsPage - 设置页面容器
+ *
+ * 【功能说明】
+ * 移动端设置页面的主容器。
+ *
+ * 【典型场景】
+ * 用户点击设置按钮后，从底部滑出的设置面板。
+ *
+ * 【样式细节】
+ * - 渐变背景
+ * - flex 纵向布局
+ * - 100% 高度
+ * - 上下 12px 内边距
+ */
+.settingsPage {
+  background: linear-gradient(109.22deg, #7425ff0d 0.27%, #2758ff0d 51.39%, #0066ff0d 99.54%);
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  box-sizing: border-box;
+  padding: 12px 0;
+}
+
+/**
+ * .settingsGroup - 设置分组
+ *
+ * 【功能说明】
+ * 将相关设置项归组的容器。
+ *
+ * 【典型场景】
+ * "账户设置"分组包含头像、昵称等设置项。
+ *
+ * 【样式细节】
+ * - 白色背景
+ * - 8px 圆角
+ * - 左右 16px 边距
+ * - 底部 12px 间距
+ * - 最后一个分组无底部间距
+ */
+.settingsGroup {
+  background-color: #ffffff;
+  border-radius: 8px;
+  margin: 0 16px 12px 16px;
+  overflow: hidden;
+
+  &:last-of-type {
+    margin-bottom: 0;
+  }
+}
+
+/**
+ * .logoutButtonContainer - 退出按钮容器
+ *
+ * 【功能说明】
+ * 承载退出登录按钮的区域。
+ *
+ * 【典型场景】
+ * 设置页面底部的退出按钮。
+ *
+ * 【样式细节】
+ * - 左右 16px 边距
+ * - 上边距 20px
+ * - 宽度 calc(100% - 32px)
+ */
+.logoutButtonContainer {
+  margin: 20px 16px 0 16px;
+  width: calc(100% - 32px);
+}
+
+/**
+ * .logoutButton - 退出登录按钮
+ *
+ * 【功能说明】
+ * 退出当前账户的按钮。
+ *
+ * 【典型场景】
+ * 设置页面底部，红色文字的退出按钮。
+ *
+ * 【样式细节】
+ * - 100% 宽度
+ * - 15px 高度的内边距
+ * - 白色背景
+ * - 红色文字 (#ff706d)
+ * - 8px 圆角
+ */
+.logoutButton {
+  width: 100%;
+  padding: 15px;
+  background-color: #ffffff;
+  color: #ff706d;
+  border: none;
+  border-radius: 8px;
+  font-size: 15px;
+  font-weight: 500;
+  cursor: pointer;
+  text-align: center;
+
+  &:hover {
+    background-color: #f7f8fa;
+  }
+}
+
+/**
+ * .versionInfo - 版本信息
+ *
+ * 【功能说明】
+ * 显示应用版本号等信息。
+ *
+ * 【典型场景】
+ * 设置页面底部，右对齐的版本号。
+ *
+ * 【样式细节】
+ * - flex 纵向右对齐
+ * - 14px 字号
+ */
+.versionInfo {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+/**
+ * .copyLinkText - 复制链接文字
+ *
+ * 【功能说明】
+ * 可点击复制的链接文字样式。
+ *
+ * 【典型场景】
+ * 显示用户协议、隐私政策等链接。
+ *
+ * 【样式细节】
+ * - 蓝色文字
+ */
+.copyLinkText {
+  color: #165dff;
+}

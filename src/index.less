@@ -1,0 +1,81 @@
+/**
+ * Copyright 2025 Beijing Volcano Engine Technology Co., Ltd. All Rights Reserved.
+ * SPDX-license-identifier: BSD-3-Clause
+ *
+ * =============================================================
+ * 全局样式文件：设置页面背景、字体、图片样式
+ * =============================================================
+ *
+ * 【泛化描述】index.less 是项目的全局样式文件。
+ *            它设置了：
+ *            - body 元素的默认样式（清除 margin、隐藏 overflow）
+ *            - 页面背景渐变色
+ *            - 全局图片样式（禁止拖拽、禁止选择）
+ *            - 全局链接样式（去除下划线）
+ *            - 全局 glow 动画（用于加载状态的圆点跳动）
+ *
+ * 【典型场景】
+ *   - 页面加载时 → body 应用背景渐变色
+ *   - 用户尝试拖拽图片 → 被 CSS 阻止（user-drag: none）
+ *   - 打字动画 → 应用 glow 关键帧动画
+ *
+ * 【字段具体含义】
+ *   linear-gradient 背景渐变
+ *     rgba(116, 37, 255, 0.05)  → 左上角淡紫色
+ *     rgba(39, 88, 255, 0.05)    → 中间淡蓝色
+ *     rgba(0, 102, 255, 0.05)    → 右下角淡蓝色
+ */
+
+@import './theme.less';
+
+body {
+  margin: 0;         // 清除浏览器默认的 body margin
+  overflow: hidden;  // 隐藏滚动条，禁止页面滚动
+  width: 100% !important;  // 强制占满宽度
+
+  // 页面背景：左上到右下的渐变色（紫色→蓝色）
+  background: linear-gradient(
+    109.22deg,
+    rgba(116, 37, 255, 0.05) 0.27%,   // 起点：淡紫色
+    rgba(39, 88, 255, 0.05) 51.39%,   // 中间：淡蓝色
+    rgba(0, 102, 255, 0.05) 99.54%    // 终点：淡蓝色
+  );
+
+  img {
+    // 禁止图片被拖拽（防止用户不小心拖走图片）
+    user-drag: none;
+    -webkit-user-drag: none;
+    // 禁止图片被选中复制
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+  }
+
+  a {
+    text-decoration: none;  // 链接默认去掉下划线
+  }
+}
+
+/**
+ * glow 动画：用于打字加载状态的三颗圆点
+ *
+ * 【动画含义】
+ *   0%   → opacity: 1     → 圆点完全不透明
+ *   40%  → opacity: 0.7   → 圆点稍微透明
+ *   100% → opacity: 0.3   → 圆点很透明
+ *
+ * 【典型场景】
+ *   AI 正在输出文字时 → 每颗圆点依次执行 glow 动画 → 产生跳动闪烁效果
+ */
+@keyframes glow {
+  0% {
+    opacity: 1;     // 初始状态：完全不透明
+  }
+  40% {
+    opacity: 0.7;  // 中间状态：稍微透明
+  }
+  100% {
+    opacity: 0.3;  // 结束状态：很透明
+  }
+}

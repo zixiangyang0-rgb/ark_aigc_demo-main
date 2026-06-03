@@ -1,0 +1,127 @@
+/**
+ * Copyright 2025 Beijing Volcano Engine Technology Co., Ltd. All Rights Reserved.
+ * SPDX-license-identifier: BSD-3-Clause
+ *
+ * =============================================================
+ * React 前端项目配置文件：定义项目依赖、脚本命令、代码规范
+ * =============================================================
+ *
+ * 【泛化描述】package.json 是 Node.js 项目的核心配置文件，
+ *            记录了项目名称、版本、依赖包、npm scripts 等信息。
+ *            前端基于 React + TypeScript + Craco 构建。
+ *
+ * 【字段具体含义 + 典型场景】
+ *
+ * 【项目基本信息】
+ *   name    = "aigc"                          → 项目名称
+ *   version = "1.6.0"                         → 当前版本号
+ *   license = "BSD-3-Clause"                   → 开源许可证
+ *   private = true                            → 私有包（防止意外发布到 npm）
+ *
+ * 【npm scripts（可运行的命令）】
+ *   npm run dev        → 同时运行：echo（打印消息）+ start（启动开发服务器）
+ *   npm run start      → 使用 Craco 启动开发服务器（端口默认 3000）
+ *   npm run server:start → 启动 Node.js 后端服务（Server/app.js）
+ *   npm run build      → 使用 Craco 构建生产版本（生成 dist/ 目录）
+ *   npm run test       → 运行单元测试
+ *   npm run prettier   → 自动格式化所有代码文件（js/jsx/tsx/ts/less/md/json）
+ *   npm run eslint     → 运行 ESLint 代码检查并自动修复
+ *   npm run stylelint  → 运行 Stylelint CSS 检查并自动修复
+ *   npm run pre-commit → Git 提交前自动运行 ESLint + Stylelint
+ *
+ * 【主要依赖（dependencies）】
+ *   @arco-design/web-react  → 字节跳动 UI 组件库（ Arco Design）
+ *   @reduxjs/toolkit        → Redux 状态管理工具包（简化 Redux 使用）
+ *   @volcengine/rtc         → 火山引擎实时通信 RTC SDK（用于音视频通话）
+ *   react / react-dom       → React 核心库（版本 18.2.0）
+ *   react-redux             → React 与 Redux 的绑定库
+ *   react-router / react-router-dom → 前端路由库（版本 6）
+ *   redux                  → Redux 核心库（版本 4）
+ *   uuid                   → 生成唯一 ID 的库
+ *
+ * 【开发依赖（devDependencies）】
+ *   @craco/craco            → Create React App 配置覆盖工具（自定义 webpack 配置）
+ *   craco-less             → Craco 的 Less 插件（支持 Less + CSS Modules）
+ *   cross-env              → 跨平台设置环境变量的工具
+ *   typescript              → TypeScript 编译器
+ *   eslint / prettier       → 代码格式化和检查工具
+ *   stylelint               → CSS/Less 代码检查工具
+ *   react-scripts           → Create React App 的脚本集
+ *
+ * 【典型场景】
+ *   npm install            → 安装所有依赖（读取 package.json）
+ *   npm run dev            → 同时启动前端开发服务器 + 后端 Node 服务
+ *   npm run build          → 构建生产版本，用于部署
+ */
+
+{
+  "name": "aigc",
+  "version": "1.6.0",
+  "license": "BSD-3-Clause",
+  "private": true,
+  "dependencies": {
+    "@arco-design/web-react": "^2.65.0",        // 字节跳动 UI 组件库
+    "@reduxjs/toolkit": "^1.8.3",               // Redux 状态管理工具包
+    "@volcengine/rtc": "~4.66.20",              // 火山引擎 RTC 实时通信 SDK
+    "react": "^18.2.0",                          // React 核心库
+    "react-dom": "^18.2.0",                      // React DOM 渲染库
+    "react-redux": "^8.0.2",                     // React-Redux 绑定库
+    "react-router": "^6.3.0",                    // React 路由库（核心）
+    "react-router-dom": "^6.3.0",                // React 路由库（DOM 版本）
+    "redux": "^4.2.0",                           // Redux 核心库
+    "uuid": "^8.3.2"                             // 生成唯一 ID 的工具
+  },
+  "scripts": {
+    "dev": "npm run echo && npm run start",     // 启动开发模式（打印消息 + 启动前端）
+    "start": "cross-env REACT_APP_LOCAL=cn craco start --host 0.0.0.0", // 使用 Craco 启动前端（允许外部访问）
+    "server:start": "node Server/app.js",       // 启动 Node.js 后端服务
+    "build": "craco build",                     // 构建生产版本
+    "test": "craco test",                       // 运行测试
+    "eject": "react-scripts eject",             // 弹出 CRA 配置（不可逆）
+    "prettier": "prettier --write '**/*.{js,jsx,tsx,ts,less,md,json}'", // 格式化代码
+    "eslint": "eslint src/ --fix --cache --quiet --ext .js,.jsx,.ts,.tsx", // ESLint 检查并修复
+    "stylelint": "stylelint 'src/**/*.less' --fix", // Stylelint 检查并修复
+    "pre-commit": "npm run eslint && npm run stylelint", // Git 提交前检查
+    "echo": "node message.js"                   // 打印启动信息
+  },
+  "eslintConfig": {
+    "extends": [
+      "react-app",                               // 继承 Create React App 的 ESLint 配置
+      "react-app/jest"                           // 继承 Jest 测试配置
+    ]
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",                                   // 支持市场份额大于 0.2% 的浏览器
+      "not dead",                               // 排除已停止维护的浏览器
+      "not op_mini all"                         // 排除 Opera Mini
+    ],
+    "development": [
+      "last 1 chrome version",                   // 开发时只测试最新 Chrome
+      "last 1 firefox version",                 // 最新 Firefox
+      "last 1 safari version"                   // 最新 Safari
+    ]
+  },
+  "devDependencies": {
+    "@craco/craco": "^7.1.0",                  // Create React App 配置覆盖工具
+    "@types/lodash": "^4.17.4",               // lodash 的 TypeScript 类型定义
+    "@types/node": "^16.11.45",               // Node.js 的 TypeScript 类型定义
+    "@types/react": "^18.0.15",               // React 的 TypeScript 类型定义
+    "@types/react-dom": "^18.0.6",            // React DOM 的 TypeScript 类型定义
+    "@types/react-helmet": "^6.1.11",        // React Helmet 的类型定义
+    "@types/uuid": "^8.3.4",                 // uuid 的 TypeScript 类型定义
+    "craco-less": "^2.1.0-alpha.0",          // Craco Less 插件（支持 Less）
+    "cross-env": "^7.0.3",                   // 跨平台环境变量设置
+    "eslint-config-airbnb": "^19.0.4",        // Airbnb ESLint 配置规范
+    "eslint-config-prettier": "^8.5.0",       // 禁用与 Prettier 冲突的 ESLint 规则
+    "eslint-plugin-babel": "^5.3.1",         // Babel ESLint 插件
+    "eslint-plugin-prettier": "^4.2.1",       // Prettier ESLint 插件
+    "postcss-less": "^6.0.0",                // PostCSS Less 解析器
+    "prettier": "^2.7.1",                     // 代码格式化工具
+    "react-scripts": "5.0.1",                 // Create React App 脚本
+    "stylelint": "^14.9.1",                   // CSS/Less 代码检查工具
+    "stylelint-config-prettier": "^9.0.3",    // Stylelint Prettier 配置
+    "stylelint-config-standard": "^26.0.0",   // Stylelint 标准配置
+    "typescript": "^4.7.4"                     // TypeScript 编译器
+  }
+}

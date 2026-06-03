@@ -1,0 +1,751 @@
+/**
+ * Copyright 2025 Beijing Volcano Engine Technology Co., Ltd. All Rights Reserved.
+ * SPDX-license-identifier: BSD-3-Clause
+ *
+ * @file Room/index.module.less
+ * @description 对话房间样式文件
+ *
+ * ═══════════════════════════════════════════════════════════════════════════
+ * 【文件功能概述】
+ * 定义对话房间（Room）组件的完整样式，包括：
+ *   - 对话消息的展示（用户消息、AI 回复）
+ *   - 消息气泡的样式和动画
+ *   - 摄像头预览区域
+ *   - 底部控制器和工具栏
+ *   - 全屏模式适配
+ *   - 移动端特殊布局
+ *
+ * ═══════════════════════════════════════════════════════════════════════════
+ * 【典型使用场景】
+ * 1. AI 与用户进行实时对话时的消息流展示
+ * 2. 用户本地摄像头的预览画面
+ * 3. AI 回复的流式打字效果
+ * 4. 全屏演示模式下的深色主题
+ * 5. 移动端设备的触摸友好布局
+ *
+ * ═══════════════════════════════════════════════════════════════════════════
+ * 【字段具体含义】
+ * wrapper : 主容器，包含内边距和圆角
+ * conversation : 对话消息滚动区域
+ * sentence : 单条消息容器
+ * user/robot : 用户和 AI 的消息气泡样式
+ * toolBar : 右侧工具栏位置
+ * controller : 底部中央控制器位置
+ * camera-wrapper : 摄像头预览容器
+ * fullScreen : 全屏模式样式
+ * mobile : 移动端适配样式
+ * ═══════════════════════════════════════════════════════════════════════════
+ */
+
+/**
+ * .wrapper - 房间主容器
+ *
+ * 【功能说明】
+ * 对话房间的根容器，设定整体尺寸和基础样式。
+ *
+ * 【典型场景】
+ * 用户进入对话后看到的完整房间界面，包含消息区和控制区。
+ *
+ * 【样式细节】
+ * - 16px 圆角，32px 内边距
+ * - box-sizing: border-box 确保尺寸计算正确
+ */
+ .wrapper {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    border-radius: 16px;
+    padding: 32px;
+    box-sizing: border-box;
+  
+    /**
+     * .conversation / .fullScreen / .mobileConversation - 对话消息区域
+     *
+     * 【功能说明】
+     * 承载所有对话消息的滚动容器，支持三种模式。
+     *
+     * 【典型场景】
+     * 1. conversation: 普通对话模式
+     * 2. fullScreen: 全屏演示模式（深色主题）
+     * 3. mobileConversation: 移动端模式
+     *
+     * 【样式细节】
+     * - 最大高度 calc(100% - 224px)
+     *   计算方式：容器高度 - AI卡片高度(128px) - 上边距(24px) - 上下padding(36px*2)
+     * - flex 纵向布局
+     * - 隐藏溢出滚动
+     */
+    .conversation,
+    .fullScreen,
+    .mobileConversation {
+      width: 100%;
+      position: relative;
+      height: 100%;
+      /**
+           * 100% 为容器高度
+           * 128px 为上层 DouBao Card Height
+           * 24px 为 margin top
+           * 36px * 2 为容器 padding
+           * 128 + 24 + 36 * 2 = 224px
+           */
+      max-height: calc(100% - 224px - 8px);
+      display: flex;
+      flex-direction: column;
+      padding-bottom: 12px;
+      overflow-x: hidden;
+      overflow-y: auto;
+      margin-top: 48px;
+  
+      /**
+       * .sentence - 单条消息容器
+       *
+       * 【功能说明】
+       * 单条对话消息的外层包装，包含头像和内容。
+       *
+       * 【典型场景】
+       * 显示 [头像] [消息内容] 的布局。
+       *
+       * 【样式细节】
+       * - 最大宽度 70%，防止一行过长
+       * - 左侧缩进 32px
+       */
+      .sentence {
+        position: relative;
+        display: flex;
+        flex-direction: row;
+        justify-content: flex-start;
+        flex-wrap: wrap;
+        align-items: center;
+        width: max-content;
+        white-space: normal;
+        max-width: 70%;
+        padding: 12px 16px;
+        margin-left: 32px;
+        gap: 8px;
+  
+        .content {
+          width: max-content;
+        }
+      }
+  
+      /**
+       * .user - 用户消息气泡
+       *
+       * 【功能说明】
+       * 用户发送的消息显示样式。
+       *
+       * 【典型场景】
+       * 用户通过语音或文字输入后，消息显示在对话区。
+       *
+       * 【样式细节】
+       * - 灰色背景 (#f1f3f5)
+       * - 12px 圆角
+       */
+      .user {
+        width: max-content;
+        border: 0px solid;
+        padding: 8px 12px 8px 12px;
+        border-radius: 12px;
+        background: #f1f3f5;
+        margin-bottom: 12px;
+      }
+
+      /**
+       * .robot - AI 消息气泡
+       *
+       * 【功能说明】
+       * AI 回复的消息样式，带渐变边框效果。
+       *
+       * 【典型场景】
+       * AI 生成回复时显示的渐变边框气泡，视觉上更突出。
+       *
+       * 【样式细节】
+       * - 渐变边框：白色到浅蓝/浅紫色渐变
+       * - 使用 background 叠加实现边框渐变
+       */
+      .robot {
+        font-family: PingFang SC;
+        color: #0c0d0e;
+        font-size: 14px;
+        font-weight: 500;
+        letter-spacing: 0.003em;
+        border: 1px solid transparent;
+        border-radius: 12px;
+        background: linear-gradient(77.86deg, #fff -3.23%, #fff 51.11%, #fff 98.65%) padding-box,
+          linear-gradient(77.86deg, #e5f2ff -3.23%, #d9e5ff 51.11%, #f6e2ff 98.65%) border-box;
+        margin-bottom: 12px;
+      }
+  
+      /**
+       * .loading-wrapper - 加载状态容器
+       *
+       * 【功能说明】
+       * AI 正在生成回复时，显示加载动画的容器。
+       *
+       * 【典型场景】
+       * AI 处理中时，显示跳动的圆点。
+       */
+      .loading-wrapper {
+        width: max-content;
+        display: inline-block;
+  
+        .loading {
+          margin-left: 8px;
+          width: max-content;
+        }
+  
+        .dot {
+          background-color: rgba(193, 163, 237, 1);
+          width: 8px;
+          height: 8px;
+        }
+      }
+  
+      /**
+       * .aiReadying - AI 正在处理状态
+       *
+       * 【功能说明】
+       * 显示 AI 正在阅读或处理的提示。
+       *
+       * 【典型场景】
+       * 用户发送消息后，显示"AI 正在阅读..."配合加载动画。
+       */
+      .aiReadying {
+        font-family: PingFang SC;
+        font-size: 16px;
+        font-weight: 500;
+        color: rgba(27, 30, 61, 0.6);
+        text-align: center;
+        display: flex;
+        flex-direction: row;
+        justify-content: flex-start;
+        align-items: center;
+        line-height: 28px;
+      }
+  
+      .aiReading-spin {
+        margin-right: 12px;
+        line-height: 16px;
+      }
+  
+      /**
+       * .msgName - 消息发送者名称区域
+       *
+       * 【功能说明】
+       * 显示消息发送者的头像和名称。
+       *
+       * 【典型场景】
+       * 显示 [小头像] [用户名] 的信息。
+       */
+      .msgName {
+        display: flex;
+        gap: 8px;
+        align-items: center;
+        font-size: 12px;
+        line-height: 20px;
+        color: #737a87;
+        margin-bottom: 4px;
+  
+        .avatar {
+          border-radius: 50%;
+          width: 24px;
+          height: 24px;
+  
+          img {
+            width: 100%;
+            height: 100%;
+          }
+        }
+      }
+    }
+  
+    /**
+     * .fullScreen - 全屏模式样式
+     *
+     * 【功能说明】
+     * 全屏演示模式下，深色主题的样式覆盖。
+     *
+     * 【典型场景】
+     * 用户点击全屏按钮后，界面变为深色，消息文字为白色。
+     */
+    .fullScreen {
+      .msgName {
+        color: #fff;
+        text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.3);
+      }
+  
+      .sentence {
+        color: #fff;
+      }
+  
+      .user {
+        background: rgba(0, 0, 0, 0.25);
+      }
+      .robot {
+        background: rgba(0, 12, 71, 0.5);
+      }
+    }
+  
+    /**
+     * 对话区滚动条隐藏
+     * 保持视觉简洁，隐藏原生滚动条
+     */
+    .conversation::-webkit-scrollbar {
+      width: 0px;
+      height: 0px;
+    }
+  
+    .conversation::-webkit-scrollbar-thumb {
+      background: rgba(0, 0, 0, 0);
+      border-radius: 0px;
+    }
+  
+    .conversation::-webkit-scrollbar-track {
+      background: rgba(0, 0, 0, 0);
+      border-radius: 0px;
+    }
+  
+    /**
+     * .toolBar - 右侧工具栏
+     *
+     * 【功能说明】
+     * 承载设置、全屏等工具按钮的容器。
+     *
+     * 【典型场景】
+     * 位于房间右下角，包含多个操作按钮。
+     *
+     * 【样式细节】
+     * - 绝对定位在右下角
+     * - 距右侧 36px，距底部 36px
+     */
+    .toolBar {
+      position: absolute;
+      right: 0px;
+      margin-right: 36px;
+      bottom: 36px;
+    }
+  
+    /**
+     * .controller - 底部中央控制器
+     *
+     * 【功能说明】
+     * 承载主要操作按钮（如说话、停止）的中央控制器。
+     *
+     * 【典型场景】
+     * 位于房间底部中央，用户进行主要交互操作。
+     *
+     * 【样式细节】
+     * - 绝对定位在底部居中
+     * - 使用 transform 精确居中
+     */
+    .controller {
+      position: absolute;
+      left: 0px;
+      bottom: 36px;
+      margin-left: 50%;
+      transform: translateX(-50%);
+    }
+  
+    /**
+     * .declare - 声明文字
+     *
+     * 【功能说明】
+     * 显示版权或免责声明的细小文字。
+     *
+     * 【典型场景】
+     * "内容由 AI 生成，仅供参考"等提示。
+     */
+    .declare {
+      position: absolute;
+      bottom: 8px;
+      left: 12px;
+      color: var(--text-color-text-4, rgba(199, 204, 214, 1));
+      font-size: 10px;
+      font-weight: 400;
+      line-height: 20px;
+    }
+  }
+  
+  /**
+   * .text - 普通状态文字
+   *
+   * 【功能说明】
+   * 非对话状态下的提示文字。
+   *
+   * 【典型场景】
+   * "点击开始对话"等引导性文字，紫色高亮。
+   */
+  .text {
+    width: 100%;
+    text-align: center;
+    color: rgba(148, 116, 255, 1);
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 22px;
+  }
+  
+  /**
+   * .closed - 关闭状态文字
+   *
+   * 【功能说明】
+   * 会话结束或服务关闭时显示的文字。
+   *
+   * 【典型场景】
+   * "对话已结束，感谢使用"等提示。
+   */
+  .closed {
+    width: 100%;
+    text-align: center;
+    color: #737a87;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 19.6px;
+  }
+  
+  /**
+   * .btns - 按钮组容器
+   *
+   * 【功能说明】
+   * 承载多个操作按钮的横向容器。
+   *
+   * 【典型场景】
+   * 包含设置、退出等按钮，水平排列在右下角。
+   */
+  .btns {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 16px;
+  
+    .setting {
+      background-color: rgba(111, 111, 111, 0.497);
+      border-radius: 50%;
+      width: 48px;
+      height: 48px;
+      padding: 12px;
+      box-sizing: border-box;
+      cursor: pointer;
+    }
+  
+    .btn {
+      cursor: pointer;
+    }
+  
+    .btn:hover {
+      opacity: 0.8;
+    }
+  
+    .btn:active {
+      opacity: 1;
+    }
+  }
+  
+  /**
+   * .column - 纵向按钮布局
+   *
+   * 【功能说明】
+   * 当工具栏需要纵向排列时的样式。
+   *
+   * 【典型场景】
+   * 全屏模式下，按钮纵向排列在角落。
+   */
+  .column {
+    margin-right: 0 !important;
+    justify-content: space-around;
+    align-items: center;
+    bottom: 64px !important;
+    gap: 0;
+  
+    img {
+      width: 84px;
+      height: 84px;
+    }
+  }
+  
+  /**
+   * .interruptContainer - 中断容器
+   *
+   * 【功能说明】
+   * 承载中断按钮的容器。
+   *
+   * 【典型场景】
+   * AI 正在生成时，显示停止按钮让用户中断。
+   */
+  .interruptContainer {
+    color: #635bff;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 14px;
+    font-weight: 500;
+  }
+  
+  /**
+   * .interruptIcon - 中断图标
+   *
+   * 【功能说明】
+   * 中断按钮前的小方块图标。
+   */
+  .interruptIcon {
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    background-color: #635bff;
+    border-radius: 2px;
+  }
+  
+  /**
+   * .interrupt - 中断按钮
+   *
+   * 【功能说明】
+   * 点击后可以中断 AI 正在进行的操作。
+   *
+   * 【典型场景】
+   * AI 回复过长时，用户可以点击停止。
+   *
+   * 【样式细节】
+   * - 半透明紫色背景
+   * - 禁用文本选择
+   */
+  .interrupt {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    background: rgba(99, 91, 255, 0.1);
+    border-radius: 4px;
+    width: max-content;
+    height: 26px;
+    padding: 0 8px;
+    gap: 4px;
+    cursor: pointer;
+    user-select: none;
+    -webkit-user-select: none; /* Safari */
+    -moz-user-select: none; /* Firefox */
+    -ms-user-select: none; /* Internet Explorer/Edge */
+  
+    &:hover {
+      opacity: 0.8;
+    }
+  
+    &:active {
+      opacity: 1;
+    }
+  }
+  
+  /**
+   * .camera-wrapper - 摄像头预览区域
+   *
+   * 【功能说明】
+   * 承载本地摄像头预览画面的小窗口。
+   *
+   * 【典型场景】
+   * 显示用户的摄像头画面，用于视频互动场景。
+   *
+   * 【样式细节】
+   * - 固定在右上角
+   * - 264px 宽度，8px 圆角
+   * - z-index: 4 确保在最上层
+   */
+  .camera-wrapper {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    width: 264px;
+    border-radius: 8px;
+    background: var(--line-color-border-2, rgba(234, 237, 241, 1));
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    border: 0.81px solid var(--line-color-border-3, rgba(221, 226, 233, 1));
+    z-index: 4;
+  
+    /**
+     * .camera-player - 摄像头播放器
+     *
+     * 【功能说明】
+     * 承载实际视频流的容器。
+     */
+    .camera-player {
+      width: 100%;
+      height: 184px;
+      border-radius: 8px;
+      overflow: hidden;
+    }
+  
+    /**
+     * .camera-player-hidden - 隐藏播放器
+     *
+     * 【功能说明】
+     * 当不需要显示摄像头时完全隐藏。
+     */
+    .camera-player-hidden {
+      display: none !important;
+    }
+  
+    /**
+     * .camera-placeholder - 摄像头占位符
+     *
+     * 【功能说明】
+     * 摄像头未开启时显示的占位内容。
+     *
+     * 【典型场景】
+     * 显示"摄像头已关闭"和开启按钮。
+     */
+    .camera-placeholder {
+      width: 100%;
+      height: 184px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      font-size: 12px;
+      color: #737a87;
+      border-bottom-left-radius: inherit;
+      border-bottom-right-radius: inherit;
+      text-align: center;
+  
+      .camera-placeholder-close-note {
+        margin-bottom: 8px;
+        width: 60px;
+        height: 60px;
+      }
+  
+      .camera-open-btn {
+        color: var(--primary-color-primary-6, rgba(22, 100, 255, 1));
+        cursor: pointer;
+        margin-left: 2px;
+      }
+    }
+  
+    /**
+     * .userTag - 用户标签
+     *
+     * 【功能说明】
+     * 显示在摄像头画面上的用户名称标签。
+     *
+     * 【典型场景】
+     * 多人场景下，标识当前摄像头属于哪个用户。
+     */
+    .userTag {
+      position: absolute;
+      top: 4px;
+      left: 4px;
+    }
+  
+    .subTitleUserTag {
+      position: absolute;
+      top: -16px;
+      right: -16px;
+    }
+  }
+  
+  /**
+   * .visionDescriptionArea - 视觉描述区域
+   *
+   * 【功能说明】
+   * 显示 AI 对当前场景的视觉理解描述。
+   *
+   * 【典型场景】
+   * AI 分析摄像头画面后，显示"我看到了..."的描述。
+   */
+  .visionDescriptionArea {
+    width: 100%;
+    background: linear-gradient(77.86deg, #f1f9ff -3.23%, #edf3ff 51.11%, #faf4ff 98.65%);
+    padding: 10px 0;
+    text-align: center;
+    border-bottom-left-radius: inherit;
+    border-bottom-right-radius: inherit;
+    box-sizing: border-box;
+    font-size: 12px;
+    line-height: 20px;
+    color: #737a87;
+  
+    .visionTitleText {
+      color: #42464e;
+      font-weight: 500;
+    }
+  }
+  
+  .subtitleAiAvatar {
+    opacity: 0.3;
+  }
+  
+  .fullScreenAiAvatar {
+    height: 184px;
+  }
+  
+  /**
+   * .mobile - 移动端样式
+   *
+   * 【功能说明】
+   * 移动设备上的特殊布局和背景。
+   *
+   * 【典型场景】
+   * 手机上使用时的全屏渐变背景。
+   */
+  .mobile {
+    background: 
+    /* 图层1 (最上层): 背景图片 */
+    /* url(...) [position] / [size] [repeat] */ url('../../../../assets/img/mobileBg.png')
+        center center / cover no-repeat,
+      /* 图层2 (下层): 渐变背景 */ linear-gradient(167.98deg, #f5f7ff 0%, #faf3ff 100%);
+  
+    .controller {
+      bottom: 156px;
+    }
+    border-radius: 0;
+  }
+  
+  /**
+   * .mobileConversation - 移动端对话区
+   *
+   * 【功能说明】
+   * 移动端对话列表的特殊布局。
+   *
+   * 【样式细节】
+   * - 更大的最大高度
+   * - 更大的左边距
+   */
+  .mobileConversation {
+    display: flex;
+    max-height: calc(100% - 324px) !important;
+    margin-top: 64px !important;
+  
+    .sentence {
+      margin-left: 0 !important;
+      max-width: 85% !important;
+    }
+
+    .mobileLine {
+      display: flex;
+    }
+  }
+  
+  .mobilePlayer {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+  }
+  
+  /**
+   * 响应式媒体查询 - 移动端适配
+   *
+   * 【功能说明】
+   * 当屏幕宽度小于 767px 时的样式调整。
+   */
+  @media (max-width: 767px) {
+    .mobileLine {
+      display: flex;
+      justify-content: flex-start;
+    }
+    .user {
+      align-self: flex-end;
+    }
+  }
+  

@@ -1,0 +1,111 @@
+/**
+ * Copyright 2025 Beijing Volcano Engine Technology Co., Ltd. All Rights Reserved.
+ * SPDX-license-Identifier: BSD-3-Clause
+ *
+ * @file FullScreenCard/index.module.less
+ * @description 全屏卡片样式文件
+ *
+ * ═══════════════════════════════════════════════════════════════════════════
+ * 【文件功能概述】
+ * 定义全屏卡片（FullScreenCard）组件的样式，包括：
+ *   - 全屏模式下的卡片容器
+ *   - 背景模糊效果
+ *   - 隐藏状态
+ *
+ * ═══════════════════════════════════════════════════════════════════════════
+ * 【典型使用场景】
+ * 1. 全屏演示模式下的背景卡片
+ * 2. 毛玻璃背景效果
+ * 3. 临时隐藏卡片内容
+ *
+ * ═══════════════════════════════════════════════════════════════════════════
+ * 【字段具体含义】
+ * card : 全屏卡片主容器，绝对定位撑满父容器
+ * hidden : 隐藏状态
+ * blur-bg : 模糊背景样式
+ * tag : 标签位置
+ * ═══════════════════════════════════════════════════════════════════════════
+ */
+
+/**
+ * .card - 全屏卡片容器
+ *
+ * 【功能说明】
+ * 全屏模式下的卡片容器，绝对定位填满父级。
+ *
+ * 【典型场景】
+ * 全屏演示时显示的卡片层。
+ *
+ * 【样式细节】
+ * - position: absolute，四边贴紧
+ * - 白色背景
+ * - flex 纵向居中布局
+ */
+.card {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  text-align: center;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: #fff;
+
+  /**
+   * .tag - 标签样式
+   *
+   * 【功能说明】
+   * 卡片内的标签元素。
+   *
+   * 【典型场景】
+   * 固定在左上角的标签。
+   *
+   * 【样式细节】
+   * - 左上角定位
+   * - 16px 边距
+   */
+  .tag {
+    position: absolute;
+    left: 16px;
+    top: 16px;
+  }
+  
+  /**
+   * .hidden - 隐藏状态
+   *
+   * 【功能说明】
+   * 隐藏卡片内容。
+   *
+   * 【典型场景】
+   * 需要临时隐藏卡片时使用。
+   */
+  &.hidden {
+    display: none;
+  }
+}
+
+/**
+ * .blur-bg - 模糊背景
+ *
+ * 【功能说明】
+ * 毛玻璃背景效果，通过滤镜实现背景模糊。
+ *
+ * 【典型场景】
+ * 全屏模式下，在主要内容下方显示模糊的背景层。
+ *
+ * 【样式细节】
+ * - filter: blur(20px) 实现模糊
+ * - transform: scale(1.1) 防止模糊边缘露出
+ * - background-size: cover 确保图片覆盖
+ */
+.blur-bg {
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  filter: blur(20px);
+  transform: scale(1.1);
+}

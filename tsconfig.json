@@ -1,0 +1,71 @@
+/**
+ * Copyright 2025 Beijing Volcano Engine Technology Co., Ltd. All Rights Reserved.
+ * SPDX-license-identifier: BSD-3-Clause
+ *
+ * =============================================================
+ * TypeScript 编译器配置文件：定义 TypeScript 编译选项和项目引用
+ * =============================================================
+ *
+ * 【泛化描述】tsconfig.json 是 TypeScript 项目的核心配置文件，
+ *            告诉 TypeScript 编译器如何编译 .ts / .tsx 文件。
+ *            前端使用 React + TypeScript，通过 Craco 调用 tsc 编译。
+ *
+ * 【字段具体含义 + 典型场景】
+ *
+ * 【编译选项】
+ *   target: "ES6"               → 编译目标为 ES6（支持现代浏览器）
+ *   lib: ["dom", "dom.iterable", "esnext"]
+ *                              → 包含 DOM API、迭代器、ES6+ 新特性
+ *   allowJs: true              → 允许编译 JavaScript 文件（混合项目迁移）
+ *   skipLibCheck: true         → 跳过第三方库的类型检查（加快编译速度）
+ *   esModuleInterop: true       → 支持 ES 模块和 CommonJS 混合导入
+ *   allowSyntheticDefaultImports: true
+ *                              → 允许 import React from 'react'（即使 React 没有 default export）
+ *   strict: true               → 启用严格模式（更严格的类型检查）
+ *   forceConsistentCasingInFileNames: true
+ *                              → 强制文件名大小写一致（避免跨平台问题）
+ *   noFallthroughCasesInSwitch: true
+ *                              → 禁止 switch 语句的 case 穿透
+ *   module: "esnext"           → 模块系统为 ES Next（支持动态 import 等）
+ *   moduleResolution: "node"   → 模块解析策略为 Node.js 风格
+ *   resolveJsonModule: true    → 允许 import .json 文件
+ *   isolatedModules: true       → 每个文件必须独立可编译（配合 Babel 使用）
+ *   noEmit: true               → 不生成 .js 文件（由 Babel/craco 处理）
+ *   jsx: "react-jsx"           → JSX 语法支持（使用新版 React 17+ 风格）
+ *   baseUrl: "."               → 基础路径为项目根目录
+ *   paths: {"@/*": ["./src/*"]}
+ *                              → 路径别名：@/xxx 等价于 ./src/xxx
+ *
+ * 【项目引用】
+ *   include: ["src"]           → 只编译 src 目录下的文件
+ *
+ * 【典型场景】
+ *   import React from 'react';       // allowSyntheticDefaultImports: true 支持
+ *   import { Button } from '@arco-design/web-react';  // skipLibCheck 跳过第三方库检查
+ *   import '@/components/Header';    // paths alias: @/ → ./src/
+ */
+
+{
+  "compilerOptions": {
+    "target": "ES6",                                        // 编译到 ES6（浏览器兼容性较好）
+    "lib": ["dom", "dom.iterable", "esnext"],             // DOM API + 迭代器 + ES6+ 新特性
+    "allowJs": true,                                       // 允许编译 JavaScript 文件
+    "skipLibCheck": true,                                   // 跳过第三方库类型检查（加快编译）
+    "esModuleInterop": true,                                 // 支持 ES Module 和 CommonJS 混用
+    "allowSyntheticDefaultImports": true,                  // 允许 import React from 'react'
+    "strict": true,                                         // 开启严格类型检查（推荐）
+    "forceConsistentCasingInFileNames": true,             // 强制文件名大小写一致
+    "noFallthroughCasesInSwitch": true,                    // 禁止 switch case 穿透
+    "module": "esnext",                                     // 模块格式：ES Next
+    "moduleResolution": "node",                            // 模块解析策略：Node.js
+    "resolveJsonModule": true,                             // 允许导入 .json 文件
+    "isolatedModules": true,                               // 每个文件必须独立可编译
+    "noEmit": true,                                        // 不生成 .js 文件（由 Babel 处理）
+    "jsx": "react-jsx",                                    // JSX 语法：新版 React 17+ 风格
+    "baseUrl": ".",                                        // 基础路径：项目根目录
+    "paths": {
+      "@/*": ["./src/*"]                                   // 路径别名：@/ 等于 ./src/
+    }
+  },
+  "include": ["src"]                                       // 只编译 src 目录
+}

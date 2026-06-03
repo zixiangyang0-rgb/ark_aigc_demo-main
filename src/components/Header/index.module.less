@@ -1,0 +1,272 @@
+/**
+ * Copyright 2025 Beijing Volcano Engine Technology Co., Ltd. All Rights Reserved.
+ * SPDX-license-identifier: BSD-3-Clause
+ *
+ * @file Header/index.module.less
+ * @description 顶部导航栏样式文件
+ *
+ * ═══════════════════════════════════════════════════════════════════════════
+ * 【文件功能概述】
+ * 定义页面顶部导航栏（Header）组件的样式，包括：
+ *   - Logo 和品牌名称
+ *   - 右侧操作按钮（设置、用户菜单等）
+ *   - 下拉弹出菜单
+ *
+ * ═══════════════════════════════════════════════════════════════════════════
+ * 【典型使用场景】
+ * 1. 页面顶部的固定导航栏
+ * 2. Logo 和标题的展示
+ * 3. 设置按钮和下拉菜单
+ * 4. 用户头像和操作入口
+ *
+ * ═══════════════════════════════════════════════════════════════════════════
+ * 【字段具体含义】
+ * header : 导航栏主容器，固定高度 48px
+ * header-logo : Logo 区域容器
+ * header-logo-text : 品牌名称渐变文字
+ * header-right : 右侧按钮区域
+ * header-setting-btn : 设置按钮
+ * header-pop : 弹出菜单样式
+ * divider : 菜单分割线
+ * header-right-text : 右侧文字链接
+ * ═══════════════════════════════════════════════════════════════════════════
+ */
+
+/**
+ * .header - 导航栏容器
+ *
+ * 【功能说明】
+ * 页面顶部的导航栏容器，白色背景，固定高度。
+ *
+ * 【典型场景】
+ * 显示 Logo、标题和设置按钮的顶部栏。
+ *
+ * 【样式细节】
+ * - 固定高度 48px
+ * - 白色背景
+ * - flex 横向布局，两端对齐
+ */
+.header {
+  height: 48px;
+  background: white;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: relative;
+
+  :global {
+    .arco-popover-content-top {
+      padding: 0px;
+    }
+  }
+}
+
+/**
+ * .header-logo - Logo 区域
+ *
+ * 【功能说明】
+ * 承载 Logo 图片和品牌名称的区域。
+ *
+ * 【典型场景】
+ * 左侧显示产品 Logo 和"火山引擎"等品牌文字。
+ *
+ * 【样式细节】
+ * - flex 横向布局
+ * - 左对齐
+ * - 左侧留白 24px
+ */
+.header-logo {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-left: 24px;
+
+  :global {
+    img {
+      height: 24px;
+    }
+    .arco-popover-content {
+      padding: 0;
+    }
+  }
+}
+
+/**
+ * .menu-wrapper - 菜单包装器
+ *
+ * 【功能说明】
+ * 导航菜单项的容器。
+ *
+ * 【典型场景】
+ * 承载多个菜单项的横向排列。
+ */
+.menu-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  row-gap: 8px;
+  justify-content: space-between;
+}
+
+/**
+ * .header-logo-text - 品牌名称文字
+ *
+ * 【功能说明】
+ * 产品或品牌名称，带渐变彩色效果。
+ *
+ * 【典型场景】
+ * 显示"火山引擎"等品牌名，使用蓝色到紫色的渐变效果。
+ *
+ * 【样式细节】
+ * - 渐变背景文字
+ * - 16px 字号
+ */
+.header-logo-text {
+  background: linear-gradient(90deg, #004FFF 38.86%, #9865FF 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  font-size: 16px;
+}
+
+/**
+ * .header-right - 右侧按钮区域
+ *
+ * 【功能说明】
+ * 承载设置、用户头像等操作按钮的右侧区域。
+ *
+ * 【典型场景】
+ * 页面右上角的操作按钮区域。
+ *
+ * 【样式细节】
+ * - z-index: 2 确保在最上层
+ * - 白色文字（可能用于深色背景场景）
+ */
+.header-right {
+  z-index: 2;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  :global {
+    span {
+      height: 24px;
+    }
+  }
+}
+
+/**
+ * .header-setting-btn - 设置按钮
+ *
+ * 【功能说明】
+ * 点击后打开设置面板的按钮。
+ *
+ * 【典型场景】
+ * 右上角的齿轮图标按钮。
+ *
+ * 【样式细节】
+ * - 透明背景
+ * - 黑色文字
+ * - 右侧留白 24px
+ */
+.header-setting-btn {
+  background-color: transparent;
+  border: none;
+  margin-right: 24px;
+  color: #000000;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+/**
+ * .header-pop - 弹出菜单样式
+ *
+ * 【功能说明】
+ * 设置下拉菜单的样式定义。
+ *
+ * 【典型场景】
+ * 点击设置按钮后弹出的菜单面板。
+ *
+ * 【样式细节】
+ * - 白色背景
+ * - 100px 正方形
+ * - 包含分割线和菜单项
+ */
+.header-pop {
+  :global {
+    .ant-popover-arrow {
+      left: 16px;
+      .ant-popover-arrow-content {
+        &:before {
+          background-color: white;
+        }
+      }
+    }
+    .ant-popover-content {
+      margin-left: 12px;
+    }
+    .ant-popover-inner {
+      margin-right: 12px;
+    }
+    .ant-popover-inner-content {
+      padding: 0;
+      background-color: white;
+      position: relative;
+      width: 100px;
+      height: 100px;
+      display: flex;
+      align-items: center;
+      flex-direction: column;
+      justify-content: space-between;
+      padding-bottom: 7px;
+      padding-top: 7px;
+      cursor: pointer;
+      color: black;
+
+      div {
+        font-size: 13px;
+        font-weight: 400;
+        line-height: 20px;
+        &:hover {
+          color: #1664ff;
+        }
+      }
+    }
+  }
+}
+
+/**
+ * .divider - 分割线
+ *
+ * 【功能说明】
+ * 菜单项之间的水平分割线。
+ *
+ * 【典型场景】
+ * 设置菜单中不同功能组之间的分隔。
+ */
+.divider {
+  margin-top: 2px;
+  margin-bottom: 2px;
+  min-width: 70%;
+  width: 70%;
+}
+
+/**
+ * .header-right-text - 右侧文字链接
+ *
+ * 【功能说明】
+ * 可点击的文字操作入口。
+ *
+ * 【典型场景】
+ * "帮助"、"关于"等文字链接。
+ *
+ * 【样式细节】
+ * - 黑色文字
+ * - 右侧留白 24px
+ * - 鼠标悬停显示手型光标
+ */
+.header-right-text {
+  color: #000000;
+  margin-right: 24px;
+  cursor: pointer;
+}

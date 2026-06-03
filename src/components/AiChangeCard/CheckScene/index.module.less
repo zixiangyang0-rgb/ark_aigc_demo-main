@@ -1,0 +1,152 @@
+/**
+ * Copyright 2025 Beijing Volcano Engine Technology Co., Ltd. All Rights Reserved.
+ * SPDX-license-identifier: BSD-3-Clause
+ *
+ * =============================================================
+ * 单个场景选择卡片组件样式文件
+ * =============================================================
+ *
+ * 【泛化描述】CheckScene = Check Scene（选择场景）。
+ *            这是单个场景选择卡片的样式，
+ *            显示 AI 头像、名称、标签，支持选中状态。
+ *
+ * 【典型场景】
+ *   - 未选中状态：灰色边框，图标+文字
+ *   - 选中状态：渐变边框，文字变渐变色
+ *   - 悬停状态：添加阴影效果
+ *
+ * 【字段具体含义】
+ *   .wrapper           → 卡片主容器
+ *   .content           → 内容区（图标+文字）
+ *   .icon              → AI 头像图标
+ *   .checked-text      → 场景名称文字
+ *   .active            → 选中状态样式
+ *   .tag               → 右上角标签（如"新"）
+ */
+
+.wrapper {
+  position: relative;
+  width: max-content;
+  height: 50px;
+  border-radius: 100px;     // 药丸形状
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;           // 鼠标变为手型
+  color: #737a87;
+  font-size: 14px;
+  line-height: 22px;
+  border: 1px solid #DDE2E9;  // 灰色边框
+  margin-bottom: 16px;
+
+  /**
+   * .content - 内容区
+   *
+   * 【功能说明】承载图标和文字的容器
+   *
+   * 【典型场景】
+   * 显示 [图标] [场景名称] 的布局
+   */
+  .content {
+    width: 100%;
+    height: 100%;
+    padding: 12px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1;
+    gap: 4px;
+
+    /**
+     * .icon - AI 头像图标
+     *
+     * 【功能说明】26px 圆形头像
+     */
+    .icon {
+      border-radius: 50%;
+      width: 26px;
+      height: 26px;
+    }
+
+    /**
+     * .checked-text - 场景名称
+     *
+     * 【功能说明】显示场景名称文字
+     */
+    .checked-text {
+      width: max-content;
+      font-size: 13px;
+      line-height: 22px;
+    }
+  }
+}
+
+/**
+ * .wrapper:hover - 悬停状态
+ *
+ * 【功能说明】鼠标悬停时添加阴影
+ */
+.wrapper:hover {
+  box-shadow: 0px 5px 6px 0px rgba(82, 102, 133, 0.15);
+}
+
+/**
+ * .active - 选中状态
+ *
+ * 【功能说明】场景被选中时的样式
+ *
+ * 【典型场景】
+ * 选中某个 AI 场景 → 边框变为渐变色，文字变为渐变文字
+ *
+ * 【样式细节】
+ * 渐变边框：白色填充 + 蓝紫渐变边框
+ */
+.active {
+  border: 1px solid transparent;  // 透明边框，渐变通过 background 实现
+  background: linear-gradient(77.86deg, #f1f9ff -3.23%, #edf3ff 51.11%, #faf4ff 98.65%) padding-box,
+    linear-gradient(77.86deg, #3b91ff -3.23%, #0d5eff 51.11%, #c069ff 98.65%) border-box;
+
+  .content {
+    .checked-text {
+      // 渐变文字：蓝到紫
+      background: linear-gradient(90deg, #004fff 38.86%, #9865ff 100%);
+      background-clip: text;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      font-size: 13px;
+      font-weight: 500;
+      line-height: 22px;
+    }
+  }
+}
+
+.active:hover {
+  box-shadow: 0px 5px 6px 0px rgba(82, 102, 133, 0.15);
+}
+
+/**
+ * .tag - 右上角标签
+ *
+ * 【功能说明】显示在右上角的标签，如"新"、"热门"等
+ *
+ * 【典型场景】
+ * 新上线的 AI 场景显示"新"标签
+ *
+ * 【样式细节】
+ * - 位置：右上角，通过 transform 偏移
+ * - 样式：紫色圆角矩形
+ */
+.tag {
+  position: absolute;
+  top: 0;
+  right: 0;
+  z-index: 3;
+  font-size: 10px;
+  font-weight: 500;
+  line-height: 18px;
+  transform: translate(20%, -50%);  // 向右上偏移
+  background: rgba(134, 123, 227, 1);  // 紫色背景
+  padding: 0px 6px 0px 6px;
+  border-radius: 20px 20px 20px 0px;  // 左上右下圆角
+  color: white;
+}

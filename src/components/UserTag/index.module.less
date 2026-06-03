@@ -1,0 +1,75 @@
+/**
+ * Copyright 2025 Beijing Volcano Engine Technology Co., Ltd. All Rights Reserved.
+ * SPDX-license-identifier: BSD-3-Clause
+ *
+ * =============================================================
+ * 用户标签组件样式文件
+ * =============================================================
+ *
+ * 【泛化描述】UserTag = User Tag（用户标签）。
+ *            在视频通话中显示用户的头像图标和名称。
+ *
+ * 【典型场景】
+ *   - 摄像头预览区域显示"我"的标签
+ *   - 远端视频区域显示 AI 的名称标签
+ *
+ * 【字段具体含义】
+ *   .userTagWrapper    → 标签主容器（图标+文字横排）
+ *   .iconContainer     → 头像图标容器（灰色圆形）
+ *   .nameContainer     → 用户名称文字容器
+ */
+
+.userTagWrapper {
+  display: flex;
+  border-radius: 6px;
+  border: 0.4px solid #1f232926;
+  background-color: #fff;
+  width: max-content;
+  z-index: 1;
+  margin-bottom: 45px;  // 向下偏移，避免挡住视频内容
+}
+
+/**
+ * .iconContainer - 头像图标容器
+ *
+ * 【功能说明】承载用户头像图标的灰色圆形区域
+ *
+ * 【典型场景】
+ * 显示一个 20px 的灰色圆形图标
+ *
+ * 【样式细节】
+ * - 灰色背景
+ * - 左侧圆角（与外层容器的圆角对齐）
+ */
+.iconContainer {
+  background-color: #5a6169;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  border-top-left-radius: 6px;
+  border-bottom-left-radius: 6px;
+}
+
+/**
+ * .nameContainer - 用户名称容器
+ *
+ * 【功能说明】显示用户的名称文字
+ *
+ * 【典型场景】
+ * 显示"我"或具体的用户名
+ *
+ * 【样式细节】
+ * - 深色文字
+ * - 12px 字号
+ * - 与图标等高
+ */
+.nameContainer {
+  color: #0c0d0e;
+  padding: 0 4px;
+  height: 20px;
+  line-height: 20px;
+  font-size: 12px;
+  font-weight: 500;
+}

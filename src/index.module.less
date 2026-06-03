@@ -1,0 +1,70 @@
+/**
+ * Copyright 2025 Beijing Volcano Engine Technology Co., Ltd. All Rights Reserved.
+ * SPDX-license-identifier: BSD-3-Clause
+ *
+ * =============================================================
+ * 全局 CSS Modules 样式文件：App 根容器样式
+ * =============================================================
+ *
+ * 【泛化描述】index.module.less 定义了根容器 #demo-for-xxx-provider 的样式。
+ *            这个 ID 是 App 组件的根元素，包裹整个应用。
+ *            样式设置了：
+ *            - 背景透明（透出 body 的渐变背景）
+ *            - 最小宽度/高度（防止页面过小导致布局错乱）
+ *            - 移动端响应式适配（宽度=100%）
+ *            - 全局字体平滑和盒模型
+ *
+ * 【典型场景】
+ *   - PC 端浏览 → 最小宽度 730px，最小高度 1000px
+ *   - 移动端浏览（宽度<768px）→ 宽度=100%，不限制最小宽度
+ *   - 页面内容过少 → 不会导致页面塌陷（min-height 保护）
+ *
+ * 【字段具体含义】
+ *   min-width: 730px  → PC 端渲染区域最小宽度，<=730px 可避免页面滚动
+ *   min-height: 1000px → PC 端渲染区域最小高度
+ *   @media (max-width: 767px) → 移动端适配（官网规范：<768px为移动端）
+ */
+
+#demo-for-xxx-provider {
+    flex: 1;   // 占满父容器的剩余空间
+
+    // ------背景色------
+    // 页面可以配置背景色，但不建议，设计同学建议将背景色设置成透明，透出主应用的渐变背景色
+    background: transparent;
+    // -----------------
+
+    // ------适配------
+    width: 100%;
+    height: 100%;
+    // 最小宽度：渲染区域的最小尺寸，可根据情况自定义
+    // 建议PC端最小宽度小于等于730px，这样可以避免页面滚动，用户体验更好
+    min-width: 730px;
+    // 最小高度：页面显示区域不够最小高度时，会允许scroll
+    min-height: 1000px;
+
+    // 官网规范：<768px时为移动端
+    @media (max-width: 767px) {
+      // 移动端渲染区域的宽度，等于设备屏幕的宽度
+      width: 100%;
+      // 移动端不限制最小宽度（由移动端布局自行决定）
+      min-width: unset;
+    }
+    // -----------------
+
+    // 写全局样式要防止与官网样式冲突
+    * {
+      // 字体平滑：让文字更清晰（Mac 上尤其明显）
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      // 盒模型：padding 和 border 包含在 width/height 内
+      box-sizing: border-box;
+    }
+
+    .container-box {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      height: 100%;
+    }
+  }

@@ -1,0 +1,33 @@
+# =============================================================
+# Prettier 代码格式化配置文件
+# =============================================================
+#
+# 【泛化描述】.prettierrc 是 Prettier 代码格式化工具的配置文件，
+#             Prettier 是一个Opinionated的代码格式化工具，
+#             统一项目的代码风格。
+#
+# 【字段具体含义 + 典型场景】
+#
+# 【参数】
+#   arrowParens: "always"   → 箭头函数参数始终加括号，如 (x) => x
+#   semi: true              → 语句末尾加分号
+#   singleQuote: true       → 使用单引号而非双引号
+#   jsxSingleQuote: false   → JSX 中使用双引号
+#   printWidth: 100         → 每行最多 100 个字符
+#   useTabs: false         → 使用空格而非 Tab
+#   tabWidth: 2             → Tab 宽度为 2 个空格
+#   trailingComma: "es5"    → ES5 兼容的尾随逗号（对象/数组最后一个元素后）
+#
+# 【典型场景】
+#   npm run prettier        → 格式化所有代码文件
+#   代码保存时自动格式化      → 配合 VS Code Prettier 插件
+{
+  "arrowParens": "always",
+  "semi": true,
+  "singleQuote": true,
+  "jsxSingleQuote": false,
+  "printWidth": 100,
+  "useTabs": false,
+  "tabWidth": 2,
+  "trailingComma": "es5"
+}

@@ -1,0 +1,227 @@
+/**
+ * Copyright 2025 Beijing Volcano Engine Technology Co., Ltd. All Rights Reserved.
+ * SPDX-license-identifier: BSD-3-Clause
+ *
+ * @file AiAvatarCard/index.module.less
+ * @description AI 数字人头像卡片样式文件
+ *
+ * ═══════════════════════════════════════════════════════════════════════════
+ * 【文件功能概述】
+ * 定义 AI 数字人头像卡片（AiAvatarCard）组件的样式，包括：
+ *   - AI 头像的展示
+ *   - AI 状态徽章（在线、忙碌等）
+ *   - 音频可视化动画（跳动条）
+ *   - 全屏模式适配
+ *
+ * ═══════════════════════════════════════════════════════════════════════════
+ * 【典型使用场景】
+ * 1. 页面顶部显示当前 AI 数字人的头像
+ * 2. AI 正在说话时的音频可视化动画
+ * 3. AI 状态指示（在线/忙碌/离线）
+ * 4. 全屏演示模式下的尺寸适配
+ *
+ * ═══════════════════════════════════════════════════════════════════════════
+ * 【字段具体含义】
+ * card : 卡片主容器，绝对定位撑满父容器
+ * avatar : AI 头像容器，圆形 167.5px
+ * aiStatus : AI 状态徽章，渐变边框气泡
+ * barContainer/bar : 音频可视化动画条
+ * fullScreen : 全屏模式样式
+ * ═══════════════════════════════════════════════════════════════════════════
+ */
+
+/**
+ * .card - AI 头像卡片容器
+ *
+ * 【功能说明】
+ * AI 头像卡片的主容器，绝对定位填满父级区域。
+ *
+ * 【典型场景】
+ * 显示 AI 数字人头像的卡片区域，位于页面顶部中央。
+ *
+ * 【样式细节】
+ * - position: absolute，四边贴紧父容器
+ * - flex 纵向居中布局
+ * - 元素间距 24px
+ */
+.card {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  text-align: center;
+  text-align: center;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 24px;
+
+  /**
+   * .avatar - AI 头像
+   *
+   * 【功能说明】
+   * 承载 AI 数字人头像图片的圆形容器。
+   *
+   * 【典型场景】
+   * 显示 AI 角色的照片或 3D 数字人形象。
+   *
+   * 【样式细节】
+   * - 167.5px 圆形
+   * - 内部图片 100% 填充
+   */
+  .avatar {
+    position: relative;
+    border-radius: 50%;
+    width: 167.5px;
+    height: 167.5px;
+    img {
+      width: 100%;
+      height: 100%;
+    }
+  }
+
+  /**
+   * .aiStatus - AI 状态徽章
+   *
+   * 【功能说明】
+   * 显示 AI 当前状态的标签，如"在线"、"忙碌"等。
+   *
+   * 【典型场景】
+   * 头像右下角显示"在线"或"忙碌中"的状态气泡。
+   *
+   * 【样式细节】
+   * - 渐变边框效果
+   * - 阴影增强立体感
+   * - 固定在头像左上角位置
+   */
+  .aiStatus {
+    position: absolute;
+    border: 1px solid;
+    border-image-source: linear-gradient(77.86deg, #e5f2ff -3.23%, #d9e5ff 51.11%, #f6e2ff 98.65%);
+    box-shadow: 0px 2px 22px 0px #0000001a;
+    width: 93px;
+    height: 73px;
+    border-radius: 24px;
+    top: -28px;
+    left: -56px;
+    color: #635bff;
+    font-weight: 500;
+    font-size: 16px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    gap: 8px;
+    background: #ffffff;
+  }
+
+  /**
+   * .barContainer - 音频可视化容器
+   *
+   * 【功能说明】
+   * 当 AI 说话时，承载跳动的音频条。
+   *
+   * 【典型场景】
+   * AI 正在语音回复时，显示跳动的条形动画。
+   */
+  .barContainer {
+    display: flex;
+    gap: 4px;
+  }
+
+  /**
+   * .bar - 音频可视化条
+   *
+   * 【功能说明】
+   * 单个跳动的音频条，多个组合形成波形效果。
+   *
+   * 【典型场景】
+   * 三个紫色条形，通过动画延迟形成波浪效果。
+   *
+   * 【样式细节】
+   * - 11px 宽，16px 高
+   * - 6px 圆角
+   * - shake 动画实现上下跳动
+   */
+  .bar {
+    width: 11px;
+    height: 16px;
+    border-radius: 6px;
+    animation: shake 1s ease infinite;
+    background-color: #4f4fff;
+  }
+
+  /**
+   * .bar:nth-child(1) - 第一个音频条
+   *
+   * 【动画延迟】
+   * -0.4s，优先开始跳动
+   */
+  .bar:nth-child(1) {
+    animation-delay: -0.4s;
+  }
+
+  /**
+   * .bar:nth-child(2) - 第二个音频条
+   *
+   * 【动画延迟】
+   * -0.2s，稍微延迟
+   */
+  .bar:nth-child(2) {
+    animation-delay: -0.2s;
+  }
+
+  /**
+   * @keyframes shake - 条形跳动动画
+   *
+   * 【动画说明】
+   * 条形高度在 100% 和 50% 之间缩放，创造波浪效果。
+   *
+   * 【时间轴】
+   * 0%: 原始高度
+   * 50%: 缩小到 50%
+   * 100%: 恢复原始高度
+   */
+  @keyframes shake {
+    0% {
+      transform: scaleY(1);
+    }
+    50% {
+      transform: scaleY(0.5);
+    }
+    100% {
+      transform: scaleY(1);
+    }
+  }
+}
+
+/**
+ * .fullScreen - 全屏模式样式
+ *
+ * 【功能说明】
+ * 全屏演示时，AI 头像和状态徽章的尺寸缩小。
+ *
+ * 【典型场景】
+ * 用户点击全屏按钮后，头像缩小以适应全屏布局。
+ *
+ * 【样式细节】
+ * - 头像缩小到 115px
+ * - 状态徽章相应缩小
+ */
+.fullScreen {
+  .avatar {
+    width: 115px;
+    height: 115px;
+  }
+
+  .aiStatus {
+    width: 72px;
+    height: 56px;
+    top: -24px;
+    left: 86px;
+    font-size: 12px;
+  }
+}

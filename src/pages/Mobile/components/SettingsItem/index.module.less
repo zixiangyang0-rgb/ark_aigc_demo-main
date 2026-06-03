@@ -1,0 +1,72 @@
+/**
+ * Copyright 2025 Beijing Volcano Engine Technology Co., Ltd. All Rights Reserved.
+ * SPDX-license-identifier: BSD-3-Clause
+ *
+ * =============================================================
+ * 移动端设置项组件样式文件
+ * =============================================================
+ *
+ * 【泛化描述】SettingsItem = 设置项。
+ *            这是移动端设置抽屉中的单个设置行样式，
+ *            显示"标签 + 值 + 箭头"。
+ *
+ * 【典型场景】
+ *   - "房间ID" → 显示房间号，无箭头
+ *   - "隐私政策" → 点击打开新窗口
+ *   - "当前版本" → 显示版本号
+ *
+ * 【字段具体含义】
+ *   .settingsItem    → 单行设置项容器
+ *   .label          → 左侧标签文字
+ *   .valueContainer → 右侧值容器（值+箭头）
+ *   .arrowIcon     → 右侧箭头图标
+ */
+
+.settingsItem {
+  display: flex;
+  justify-content: space-between;  // 两端对齐
+  align-items: center;           // 垂直居中
+  padding: 16px;
+  background-color: #ffffff;
+  cursor: pointer;              // 鼠标变为手型
+  min-height: 50px;
+  box-sizing: border-box;
+
+  // 除了最后一个，其他都有底部分割线
+  &:not(:last-child) {
+    border-bottom: 0.5px solid #f0f0f0;  // 细灰色分割线
+  }
+
+  /**
+   * .label - 左侧标签
+   *
+   * 【功能说明】显示设置项的名称
+   *
+   * 【典型场景】
+   * "房间ID"、"隐私政策"、"当前版本"等
+   */
+  .label {
+    font-size: 16px;
+    color: #0c0d0e;
+    font-weight: 500;     // 中粗
+    min-width: 64px;     // 最小宽度，防止标签过短时值靠左
+  }
+
+  /**
+   * .valueContainer - 右侧值容器
+   *
+   * 【功能说明】显示设置项的值和箭头
+   *
+   * 【典型场景】
+   * 值靠右显示，后面跟着一个箭头图标
+   */
+  .valueContainer {
+    color: #737a87;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;  // 右对齐
+    gap: 6px;                   // 值和箭头之间的间距
+    text-align: right;         // 文字右对齐
+  }
+}

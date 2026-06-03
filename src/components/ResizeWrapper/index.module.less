@@ -1,0 +1,23 @@
+/**
+ * Copyright 2025 Beijing Volcano Engine Technology Co., Ltd. All Rights Reserved.
+ * SPDX-license-identifier: BSD-3-Clause
+ *
+ * =============================================================
+ * 响应式容器组件样式文件
+ * =============================================================
+ *
+ * 【泛化描述】ResizeWrapper = Resize Wrapper（响应式包装器）。
+ *            将容器的高度自动设置为 window.innerHeight（浏览器视口高度），
+ *            确保容器始终填满整个屏幕。
+ *
+ * 【典型场景】
+ *   - 全屏布局：容器占满整个浏览器窗口
+ *   - 移动端适配：防止页面内容过少时出现空白
+ *
+ * 【字段具体含义】
+ *   .container  → 响应式容器
+ */
+
+.container {
+    position: relative;  // 相对定位，reflow 性能比 absolute 好
+}

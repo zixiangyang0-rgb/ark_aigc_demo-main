@@ -1,0 +1,115 @@
+/**
+ * Copyright 2025 Beijing Volcano Engine Technology Co., Ltd. All Rights Reserved.
+ * SPDX-license-identifier: BSD-3-Clause
+ *
+ * @file DeviceDrawerButton/index.module.less
+ * @description 设备抽屉按钮样式文件
+ *
+ * ═══════════════════════════════════════════════════════════════════════════
+ * 【文件功能概述】
+ * 定义设备抽屉按钮（DeviceDrawerButton）组件的样式，用于：
+ *   - 菜单中设备列表的行项
+ *   - 标签和数值的左右排列布局
+ *
+ * ═══════════════════════════════════════════════════════════════════════════
+ * 【典型使用场景】
+ * 1. 菜单中显示"麦克风"、"摄像头"等设备及其状态
+ * 2. 设置项的行布局，显示名称和当前值
+ * 3. 折叠面板中的子项
+ *
+ * ═══════════════════════════════════════════════════════════════════════════
+ * 【字段具体含义】
+ * wrapper : 主容器，包含标签和数值两列
+ * label : 左侧标签区域，包含文字和图标
+ * label-text : 标签文字样式
+ * value : 右侧数值区域
+ * ═══════════════════════════════════════════════════════════════════════════
+ */
+
+/**
+ * .wrapper - 按钮主容器
+ *
+ * 【功能说明】
+ * 设备抽屉按钮的根容器，包含左右两列内容。
+ *
+ * 【典型场景】
+ * [麦克风图标] 麦克风 -------- 开启中
+ *
+ * 【样式细节】
+ * - flex 横向布局
+ * - 两列间距 24px
+ * - 上下 8px、左右 16px 内边距
+ */
+.wrapper {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  gap: 24px;
+  padding: 8px 16px;
+  
+
+  /**
+   * .label - 左侧标签区域
+   *
+   * 【功能说明】
+   * 承载设备名称和可选图标。
+   *
+   * 【典型场景】
+   * 麦克风图标 + "麦克风"文字，垂直排列在左侧。
+   *
+   * 【样式细节】
+   * - flex 纵向布局
+   * - 左对齐
+   * - 上下元素间距 12px
+   */
+  .label {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    line-height: 16px;
+    gap: 12px;
+
+   /**
+    * .label-text - 标签文字
+    *
+    * 【功能说明】
+    * 设备或设置项的名称文字。
+    *
+    * 【典型场景】
+    * "麦克风"、"摄像头"、"画质"等名称。
+    *
+    * 【样式细节】
+    * - 14px 字号，中粗字重
+    * - 左对齐
+    */
+   .label-text {
+      font-family: PingFang SC;
+      font-size: 14px;
+      font-weight: 500;
+      line-height: 22px;
+      letter-spacing: 0.003em;
+      text-align: left;
+   }
+  }
+
+  /**
+   * .value - 右侧数值区域
+   *
+   * 【功能说明】
+   * 承载设备当前状态或数值。
+   *
+   * 【典型场景】
+   * "开启中"、"关闭"、"高"等状态值。
+   *
+   * 【样式细节】
+   * - flex 纵向居中对齐
+   * - 元素上下间距 18px
+   */
+  .value {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 18px;
+  }
+}

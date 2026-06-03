@@ -1,0 +1,45 @@
+# =============================================================
+# Python 项目配置文件：定义项目元数据和依赖
+# =============================================================
+#
+# 【泛化描述】pyproject.toml 是 Python 3.11+ 的标准项目配置文件（PEP 621）。
+#             它定义了项目的名称、版本、描述、Python 版本要求和依赖包。
+#             类似于 package.json之于 Node.js。
+#
+# 【字段具体含义 + 典型场景】
+#
+# 【项目元数据】
+#   name = "server-python"            → 项目名称
+#   version = "0.1.0"                → 当前版本号
+#   description = "Add your description here"
+#                                         → 项目描述（可自定义）
+#   readme = "README.md"             → 项目说明文件
+#   requires-python = ">=3.13"        → 最低 Python 版本要求
+#
+# 【依赖包列表 dependencies】
+#   fastapi                  → Web 框架（API 接口定义）
+#   httpx                    → 异步 HTTP 客户端（调用外部 AI API）
+#   pydantic                 → 数据验证（请求/响应模型）
+#   python-dotenv             → 环境变量管理（从 .env 读取配置）
+#   uvicorn                  → ASGI 服务器（运行 FastAPI）
+#   volcengine-python-sdk[ark] → 火山引擎 Python SDK（ARK 大模型服务）
+#
+# 【典型场景】
+#   uv sync               → 根据 pyproject.toml 安装依赖（uv 是新一代包管理工具）
+#   pip install .         → 安装当前项目为可执行包
+#   python -m server     → 运行项目
+
+[project]
+name = "server-python"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "fastapi==0.115.0",                        # Web 框架
+    "httpx==0.27.2",                          # 异步 HTTP 客户端
+    "pydantic==2.9.2",                        # 数据模型与校验
+    "python-dotenv==1.0.1",                   # 环境变量管理
+    "uvicorn[standard]==0.32.0",              # ASGI 服务器
+    "volcengine-python-sdk[ark]>=5.0.3",      # 火山引擎 ARK SDK
+]

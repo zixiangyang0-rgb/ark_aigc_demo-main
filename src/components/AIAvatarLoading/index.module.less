@@ -1,0 +1,88 @@
+/**
+ * Copyright 2025 Beijing Volcano Engine Technology Co., Ltd. All Rights Reserved.
+ * SPDX-license-identifier: BSD-3-Clause
+ *
+ * =============================================================
+ * AI 数字人准备动画样式文件
+ * =============================================================
+ *
+ * 【泛化描述】AIAvatarLoading = AI Avatar Loading（AI 头像加载动画）。
+ *            当数字人（AI 虚拟形象）还未就绪时，
+ *            显示一个人型轮廓 + 流光动画 + "数字人准备中，请稍候..."文字。
+ *
+ * 【典型场景】
+ *   用户进入数字人场景 → AI 还未准备好 → 显示 AIAvatarLoading
+ *   AI 准备好后 → 对话区域会切换到真正的 Conversation 组件
+ *
+ * 【字段具体含义】
+ *   .container        → 主容器（占满整个区域，居中布局）
+ *   .avatarContainer  → 头像容器（flex纵向排列）
+ *   .avatarSvg       → SVG 人型轮廓（流光动画）
+ *   .loadingText     → 加载文字（居中显示在头像下方）
+ */
+
+/**
+ * .container - 主容器
+ *
+ * 【功能说明】占满整个父容器，内容居中显示
+ *
+ * 【典型场景】
+ * 整个数字人准备区域占满父容器，SVG和文字居中
+ */
+.container {
+  display: flex;
+  justify-content: center;  // 水平居中
+  align-items: center;      // 垂直居中
+  width: 100%;
+  height: 100%;
+}
+
+/**
+ * .avatarContainer - 头像容器
+ *
+ * 【功能说明】承载 SVG 人型轮廓和加载文字
+ *
+ * 【典型场景】
+ * SVG 和 "数字人准备中" 文字纵向排列
+ */
+.avatarContainer {
+  position: relative;
+  display: flex;
+  flex-direction: column;  // 纵向排列
+  align-items: center;     // 水平居中
+}
+
+/**
+ * .avatarSvg - SVG 人型轮廓
+ *
+ * 【功能说明】显示人型轮廓 SVG，配合流光动画
+ *
+ * 【典型场景】
+ * SVG 内的 animate 标签产生渐变流动效果
+ *
+ * 【样式细节】
+ * - 最大宽度 80%
+ * - 高度自适应
+ */
+.avatarSvg {
+  max-width: 80%;
+  height: auto;
+}
+
+/**
+ * .loadingText - 加载文字
+ *
+ * 【功能说明】显示在 SVG 下方的提示文字
+ *
+ * 【典型场景】
+ * 显示 "数字人准备中，请稍候..." 文字
+ *
+ * 【样式细节】
+ * - 18px 字号，居中显示
+ * - 距离 SVG 上方 30px
+ */
+.loadingText {
+  margin-top: 30px;
+  font-size: 18px;
+  text-align: center;
+}

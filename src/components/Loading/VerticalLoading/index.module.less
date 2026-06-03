@@ -1,0 +1,92 @@
+/**
+ * Copyright 2025 Beijing Volcano Engine Technology Co., Ltd. All Rights Reserved.
+ * SPDX-license-identifier: BSD-3-Clause
+ *
+ * =============================================================
+ * 垂直方向加载动画样式文件
+ * =============================================================
+ *
+ * 【泛化描述】VerticalLoading = 垂直方向加载动画。
+ *            显示三根垂直排列的条形，通过 CSS 动画产生跳动效果，
+ *            常用于表示"加载中"状态。
+ *
+ * 【典型场景】
+ *   - AI 准备中时显示在文字旁边
+ *   - 页面加载中时作为 loading indicator
+ *
+ * 【字段具体含义】
+ *   .loader  → 加载器的外层容器，三根条形水平排列
+ *   .bar     → 每一根跳动的条形
+ */
+
+.loader {
+  width: 40px;   // 总宽度
+  height: 10px;   // 总高度
+  display: flex;
+  justify-content: center;  // 水平居中
+  align-items: center;      // 垂直居中
+  margin: 6px 0px;         // 上下边距
+}
+
+/**
+ * .bar - 单根跳动的条形
+ *
+ * 【功能说明】单根跳动的条形，多根组合形成波浪效果
+ *
+ * 【典型场景】
+ * 三根条形依次上下跳动，产生波浪效果
+ *
+ * 【样式细节】
+ * - 3px 宽，12px 高
+ * - 蓝色条形
+ * - shake 动画实现上下跳动
+ */
+.bar {
+  width: 3px;
+  height: 12px;
+  margin: 1px;
+  display: inline-block;
+  animation: shake 0.6s ease infinite;  // 无限循环跳动
+}
+
+/* 为每个 bar 指定不同的延迟来实现波浪效果 */
+.bar:nth-child(1) {
+  animation-delay: -0.2s;  // 第一个先跳
+}
+
+.bar:nth-child(2) {
+  animation-delay: -0.1s;  // 第二个延迟
+}
+
+.bar:nth-child(3) {
+  /* 无延迟，最后跳 */
+}
+
+/**
+ * @keyframes shake - 跳动动画
+ *
+ * 【动画说明】
+ * 条形高度在 100% 和 50% 之间变化，同时颜色变浅
+ *
+ * 【时间轴】
+ * 0%:   高度 100%，深蓝色
+ * 50%:  高度 50%，浅蓝色
+ * 100%: 高度 100%，深蓝色
+ *
+ * 【循环】
+ * 无限循环，持续 0.6 秒
+ */
+@keyframes shake {
+  0% {
+    transform: scaleY(1);  // 原始高度
+    background-color: var(--primary-color-primary-7, rgba(23, 89, 221, 1));  // 深蓝色
+  }
+  50% {
+    transform: scaleY(0.5);  // 高度减半
+    background-color: var(--primary-color-primary-3, rgba(151, 188, 255, 1));  // 浅蓝色
+  }
+  100% {
+    transform: scaleY(1);  // 恢复原始高度
+    background-color: var(--primary-color-primary-7, rgba(23, 89, 221, 1));  // 深蓝色
+  }
+}

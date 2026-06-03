@@ -1,0 +1,187 @@
+/**
+ * Copyright 2025 Beijing Volcano Engine Technology Co., Ltd. All Rights Reserved.
+ * SPDX-license-identifier: BSD-3-Clause
+ *
+ * @file Antechamber/index.module.less
+ * @description 前厅/等待区域样式文件
+ *
+ * ═══════════════════════════════════════════════════════════════════════════
+ * 【文件功能概述】
+ * 定义 AI 前厅（Antechamber）组件的样式，用于：
+ *   - AI 数字人初始化/等待状态
+ *   - AI 角色卡片展示（头像、描述）
+ *   - 调用按钮显示
+ *   - 移动端特殊背景样式
+ *
+ * ═══════════════════════════════════════════════════════════════════════════
+ * 【典型使用场景】
+ * 1. 应用启动时 AI 数字人正在加载
+ * 2. 用户进入房间前等待 AI 准备就绪
+ * 3. AI 角色信息的展示（如"数字人小慧"）
+ * 4. 移动端设备上的特殊渐变背景效果
+ *
+ * ═══════════════════════════════════════════════════════════════════════════
+ * 【字段具体含义】
+ * wrapper : 主容器，绝对定位，居中布局
+ * avatar : AI 头像位置偏移，用于与卡片重叠效果
+ * mobile : 移动端头像样式（取消偏移）
+ * description : AI 描述文字，固定在底部
+ * invoke-btn : 调用按钮，固定在头像下方
+ * mobileDesc : 移动端描述文字
+ * mobile : 移动端全屏背景样式
+ * ═══════════════════════════════════════════════════════════════════════════
+ */
+
+/**
+ * .wrapper - 前厅容器
+ *
+ * 【功能说明】
+ * AI 前厅的主容器，负责整体布局和居中展示。
+ *
+ * 【典型场景】
+ * 用户进入房间后，在 AI 准备就绪前显示的等待界面。
+ *
+ * 【样式细节】
+ * - 100% 宽高，圆角 16px
+ * - flex 纵向布局，元素居中
+ */
+ .wrapper {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    border-radius: 16px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  
+    /**
+     * .avatar - AI 头像定位
+     *
+     * 【功能说明】
+     * 调整 AI 头像的位置，使其与上方的 AI 卡片产生视觉重叠效果。
+     *
+     * 【典型场景】
+     * AI 卡片（AiAvatarCard）显示在上方，头像从卡片下方露出，
+     * 创造层次感和立体效果。
+     *
+     * 【样式细节】
+     * - 上移 128px（AvatarCard.avatar 高度的一半）
+     * - 右移 calc(50% - 64px)，使头像水平居中
+     *   （50% 位置减去头像宽度一半 64px）
+     */
+    .avatar {
+      /**
+           * height = 128px in AvatarCard.avatar
+           *
+           */
+      margin-top: -128px;
+      /**
+           * width = 128px in AvatarCard.avatar 
+           * 128px / 2 = 64px
+           *
+           */
+      transform: translateX(calc(50% - 64px));
+    }
+  
+    /**
+     * .mobile - 移动端头像样式
+     *
+     * 【功能说明】
+     * 移动端取消头像的偏移效果，保持正常位置。
+     *
+     * 【典型场景】
+     * 在小屏幕设备上，头像居中显示，不需要偏移效果。
+     */
+    .mobile {
+      transform: none !important;
+    }
+  
+    /**
+     * .description - AI 描述文字
+     *
+     * 【功能说明】
+     * 显示 AI 角色的简短描述或状态说明。
+     *
+     * 【典型场景】
+     * 显示"数字人小慧"、"正在加载中..."等文字。
+     *
+     * 【样式细节】
+     * - 固定在容器左下角
+     * - 灰色小字号文字
+     */
+    .description {
+      font-family: PingFang SC;
+      font-weight: 400;
+      font-size: 10px;
+      line-height: 20px;
+      color: #c7ccd6;
+  
+      position: absolute;
+      bottom: 24px;
+      left: 24px;
+    }
+  
+    /**
+     * .invoke-btn - 调用按钮
+     *
+     * 【功能说明】
+     * 触发 AI 开始互动的按钮容器。
+     *
+     * 【典型场景】
+     * 显示在头像下方，用户点击后开始与 AI 对话。
+     *
+     * 【样式细节】
+     * - 距离头像上方 32px
+     */
+    .invoke-btn {
+      margin-top: 32px;
+    }
+  
+    /**
+     * .mobileDesc - 移动端描述文字
+     *
+     * 【功能说明】
+     * 移动端设备的描述文字样式，位置和字号与桌面端不同。
+     *
+     * 【典型场景】
+     * 移动端描述文字居中显示，固定在底部。
+     *
+     * 【样式细节】
+     * - 居中对齐
+     * - 字号 14px
+     */
+    .mobileDesc {
+      font-weight: 400;
+      font-size: 14px;
+      line-height: 22px;
+      text-align: center;
+      color: #737a87;
+      position: absolute;
+      bottom: 12px;
+    }
+  }
+  
+  /**
+   * .mobile - 移动端全屏背景样式
+   *
+   * 【功能说明】
+   * 为移动端设备提供特殊的渐变背景效果。
+   *
+   * 【典型场景】
+   * 在手机上显示时，使用紫色渐变背景增强视觉效果。
+   *
+   * 【样式细节】
+   * - 背景图片叠加渐变
+   * - 移除圆角（border-radius: 0）
+   * - 使用 linear-gradient 实现紫色渐变效果
+   */
+  .mobile {
+    background: 
+    /* 图层1 (最上层): 背景图片 */
+    /* url(...) [position] / [size] [repeat] */ url('../../../../assets/img/mobileBg.png')
+        center center / cover no-repeat,
+      /* 图层2 (下层): 渐变背景 */ linear-gradient(167.98deg, #f5f7ff 0%, #faf3ff 100%);
+    border-radius: 0;
+  }
+  

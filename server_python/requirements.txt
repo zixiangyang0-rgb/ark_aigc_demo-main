@@ -1,0 +1,52 @@
+# =============================================================
+# Simple Python Server 依赖配置文件
+# =============================================================
+#
+# 【泛化描述】requirements.txt 定义了 server_python 项目的 Python 依赖包。
+#             server_python 是一个简化版的 RTC 代理服务，比 rag_llm_server 简单：
+#             - 只提供 getScenes 和 proxy 接口
+#             - 不包含 RAG（知识库检索）和 LLM（大语言模型）功能
+#
+# 【安装命令】pip install -r requirements.txt
+#
+# 【字段具体含义 + 典型场景】
+#
+# 【Web 框架】
+#   fastapi==0.115.0
+#   → 现代化、高性能的 Python Web 框架
+#   → 典型场景：定义 API 接口 @app.get("/getScenes")
+#
+# 【ASGI 服务器】
+#   uvicorn[standard]==0.32.0
+#   → 高性能 ASGI 服务器
+#   → 典型场景：uvicorn main:app --reload
+#
+# 【异步 HTTP 客户端】
+#   httpx==0.27.2
+#   → 支持同步和异步的 HTTP 客户端
+#   → 典型场景：调用火山引擎 RTC API
+#
+# 【数据模型与校验】
+#   pydantic==2.9.2
+#   → Python 数据验证库
+#   → 典型场景：定义请求/响应数据模型
+#
+# 【环境变量管理】
+#   python-dotenv==1.0.1
+#   → 从 .env 文件加载环境变量
+#   → 典型场景：从 .env 读取 AK/SK 等敏感信息
+
+# Web 框架核心
+fastapi==0.115.0
+
+# 高性能 ASGI 服务器
+uvicorn[standard]==0.32.0
+
+# 异步 HTTP 客户端
+httpx==0.27.2
+
+# 数据模型与校验
+pydantic==2.9.2
+
+# 环境变量管理
+python-dotenv==1.0.1

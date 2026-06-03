@@ -1,0 +1,222 @@
+/**
+ * Copyright 2025 Beijing Volcano Engine Technology Co., Ltd. All Rights Reserved.
+ * SPDX-license-identifier: BSD-3-Clause
+ *
+ * @file DrawerRowItem/index.module.less
+ * @description 抽屉行项目样式文件
+ *
+ * ═══════════════════════════════════════════════════════════════════════════
+ * 【文件功能概述】
+ * 定义抽屉行项目（DrawerRowItem）组件的样式，包括：
+ *   - 行项目布局（图标 + 文字 + 箭头）
+ *   - 页脚按钮（取消/确认）
+ *   - 子内容区域
+ *
+ * ═══════════════════════════════════════════════════════════════════════════
+ * 【典型使用场景】
+ * 1. 设置抽屉中的菜单项
+ * 2. 确认对话框的取消/确定按钮
+ * 3. 可展开的子菜单项
+ *
+ * ═══════════════════════════════════════════════════════════════════════════
+ * 【字段具体含义】
+ * row : 行项目主容器
+ * firstPart : 左侧内容区（图标 + 文字）
+ * finalPart : 右侧内容区（箭头）
+ * icon : 行项目图标
+ * footer : 页脚按钮容器
+ * cancel : 取消按钮
+ * confirm : 确认按钮
+ * children : 子内容区域
+ * ═══════════════════════════════════════════════════════════════════════════
+ */
+
+/**
+ * .row - 行项目主容器
+ *
+ * 【功能说明】
+ * 单个可点击的行项目容器。
+ *
+ * 【典型场景】
+ * 设置抽屉中的"麦克风设置"菜单项。
+ *
+ * 【样式细节】
+ * - flex 横向布局
+ * - 鼠标悬停显示手型光标
+ */
+.row {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    cursor: pointer;
+
+    /**
+     * .firstPart - 左侧内容区
+     *
+     * 【功能说明】
+     * 包含图标和文字的主要信息区域。
+     *
+     * 【典型场景】
+     * [图标] [麦克风设置] 的布局。
+     *
+     * 【样式细节】
+     * - 占据 90% 宽度
+     * - flex 横向排列
+     * - 13px 中粗字体
+     */
+    .firstPart {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      width: 90%;
+      color: var(--text-color-text-2, var(--text-color-text-2, #42464E));
+      text-align: center;
+
+      /* Body/body-2 medium */
+      font-family: "PingFang SC";
+      font-size: 13px;
+      font-style: normal;
+      font-weight: 500;
+      line-height: 22px; /* 169.231% */
+      letter-spacing: 0.039px;
+    }
+
+    /**
+     * .finalPart - 右侧内容区
+     *
+     * 【功能说明】
+     * 通常是右箭头图标。
+     *
+     * 【典型场景】
+     * [麦克风设置] [>] 的布局。
+     *
+     * 【样式细节】
+     * - 占据 10% 宽度
+     * - 右对齐
+     */
+    .finalPart {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      width: 10%;
+      justify-content: flex-end;
+
+      .rightOutlined {
+        font-size: 12px;
+      }
+    }
+
+    /**
+     * .icon - 行项目图标
+     *
+     * 【功能说明】
+     * 显示在文字左侧的图标。
+     *
+     * 【典型场景】
+     * 麦克风图标、设置图标等。
+     *
+     * 【样式细节】
+     * - 右边距 4px
+     */
+    .icon {
+      margin-right: 4px;
+    }
+}
+
+
+
+/**
+ * .footer - 页脚按钮容器
+ *
+ * 【功能说明】
+ * 承载取消和确认按钮的页脚区域。
+ *
+ * 【典型场景】
+ * 确认对话框底部的按钮组。
+ *
+ * 【样式细节】
+ * - 右对齐
+ * - 宽度 calc(100% - 12px)
+ */
+.footer {
+  width: calc(100% - 12px);
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  align-items: center;
+
+  /**
+   * .cancel - 取消按钮
+   *
+   * 【功能说明】
+   * 取消操作的按钮。
+   *
+   * 【典型场景】
+   * "取消"按钮，灰色边框样式。
+   *
+   * 【样式细节】
+   * - 88px 宽度，32px 高度
+   * - 6px 圆角
+   * - 右边距 12px
+   */
+  .cancel {
+    width: 88px;
+    height: 32px;
+    border-radius: 6px;
+    border: 1px solid var(--line-color-border-3, rgba(221, 226, 233, 1));
+    margin-right: 12px;
+  }
+
+  /**
+   * .confirm - 确认按钮
+   *
+   * 【功能说明】
+   * 确认操作的按钮。
+   *
+   * 【典型场景】
+   * "确定"按钮，渐变背景。
+   *
+   * 【样式细节】
+   * - 88px 宽度，32px 高度
+   * - 渐变背景
+   * - 白色文字
+   */
+  .confirm {
+    width: 88px;
+    height: 32px;
+    border-radius: 6px;
+    background: linear-gradient(95.87deg, #1664FF 0%, #8040FF 97.7%);
+    color: white;
+  }
+}
+
+/**
+ * .children - 子内容区域
+ *
+ * 【功能说明】
+ * 行项目展开后的子内容容器。
+ *
+ * 【典型场景】
+ * 展开子菜单时显示的嵌套内容。
+ *
+ * 【样式细节】
+ * - 填满父容器宽度
+ * - overflow: hidden 防止内容溢出
+ */
+.children {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  overflow: hidden;
+}
+
+/**
+ * ant-drawer-body 全局样式覆盖
+ * 设置抽屉内容区域的内边距
+ */
+:global {
+  .ant-drawer-body {
+    padding: 12px 24px 0px 24px;
+  }
+}
