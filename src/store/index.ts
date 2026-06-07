@@ -3,77 +3,94 @@
  * SPDX-license-identifier: BSD-3-Clause
  *
  * =============================================================
- * Redux Store 主入口：配置 Redux Toolkit，创建全局状态管理
+ * Redux Store 主入口：配置 Redux Toolkit，创建全局状态管理器
  * =============================================================
  *
- * 【泛化描述】Redux = 全局状态管理器。本文件是 Redux 的"总调度室"：
- *   1. configureStore : 创建 Redux store
- *   2. 合并多个 slice : 把 room（房间状态）和 device（设备状态）合并到一起
- *   3. 导出 RootState : 让组件可以访问 Redux 状态
+ * 【开门见山】Redux 就像一个"全局大脑"，整个应用的所有重要数据都存在这里。
+ *            任何一个组件想知道"现在用户在哪个房间"、"AI 在不在说话"，
+ *            都可以来这里查。同时，任何组件想更新这些数据，
+ *            也必须按规矩来——发一个"通知"（Action），让 Redux 自动更新数据。
+ *
+ *            这个文件就是 Redux 的"总调度室"，负责把所有"小仓库"（Slice）合并成一个"大仓库"。
+ *
+ * 【生活比喻】
+ *            把 Redux Store 想象成一个公司的"档案室"：
+ *            - room Slice（房间档案）：记录当前在哪个房间、对话说了什么、AI 在干嘛
+ *            - device Slice（设备档案）：记录电脑上有哪几个麦克风、当前用的是哪个
+ *            - 任何员工（组件）想查档案，直接翻档案室
+ *            - 任何员工想改档案，必须填"申请表"（dispatch Action）
  *
  * 【典型场景】
  *   import store from '@/store';
- *   import { useSelector } from 'react-redux';
- *   import { RootState } from '@/store';
  *
- *   // 读取状态
- *   const room = useSelector((state: RootState) => state.room);
- *   const isJoined = room.isJoined;
+ *   // 查数据（不推荐在组件外用，推荐用 useSelector）
+ *   const state = store.getState();
+ *   console.log(state.room.isJoined);  // 我在房间里吗？
  *
- *   // 发送 action
- *   store.dispatch({ type: 'room/localJoinRoom', payload: {...} });
+ *   // 改数据（不推荐在组件外用，推荐用 useDispatch）
+ *   store.dispatch({ type: 'room/updateScene', payload: 'Custom' });
  */
 
 'use strict';
 
 import { configureStore } from '@reduxjs/toolkit';
-import roomSlice, { RoomState } from './slices/room';     // 房间状态 slice
-import deviceSlice, { DeviceState } from './slices/device';  // 设备状态 slice
+import roomSlice, { RoomState } from './slices/room';     // 房间状态模块
+import deviceSlice, { DeviceState } from './slices/device';  // 设备状态模块
 
 /**
- * 【类型含义】全局 Redux 状态树的根类型
+ * 【类型含义】整个应用的"数据地图"类型定义
  *
  * 【字段具体含义】
- *   room   : 房间状态（是否加入、对话历史、AI状态等）
- *   device : 设备状态（麦克风列表、摄像头列表、当前选中的设备等）
+ *   room   : 房间状态档案
+ *             包含：是否已加入、当前场景、AI有没有在说话、对话历史字幕、当前有多少人……
+ *             就像"会议室使用情况表"，谁在用、用了多久都记着
+ *
+ *   device : 设备状态档案
+ *             包含：电脑上有哪几个麦克风/摄像头、用户选了哪个、设备权限开了没
+ *             就像"会议室设备清单"，列着投影仪、音响、白板在不在
  */
 export interface RootState {
-    room: RoomState;    // 房间状态树
-    device: DeviceState; // 设备状态树
+    room: RoomState;      // 房间档案（通话状态、AI状态、字幕历史）
+    device: DeviceState;  // 设备档案（麦克风列表、摄像头列表、权限状态）
 }
 
 /**
- * 【方法含义】创建 Redux Store
+ * 【方法含义】创建全局 Redux 仓库
  *
- * 【泛化描述】Redux Store 是整个应用状态的"单一数据源"。
- *            configureStore 是 Redux Toolkit 提供的便捷 API，
- *            相当于 createStore + middleware 的组合。
+ * 【泛化描述】configureStore 是 Redux Toolkit 的核心 API，
+ *            相当于传统 Redux 的 createStore + middleware 组合，
+ *            但更简单、更安全。它把所有 reducer 合并成一个根 reducer。
  *
  * 【参数说明】
- *   reducer: 把多个 reducer 合并成一个根 reducer
- *   middleware: 配置中间件
- *     getDefaultMiddleware.serializableCheck: false
- *     → 禁用 Redux 的"可序列化检查"（因为 RTC SDK 的某些数据可能包含不可序列化的对象）
+ *   reducer:
+ *     把 roomSlice 和 deviceSlice 合并成一个"大仓库"。
+ *     就像把"会议室使用情况表"和"设备清单"两本档案装进同一个档案柜。
+ *
+ *   middleware:
+ *     Redux 默认会检查"你存入的数据必须是普通对象"。
+ *     但 RTC SDK 返回的一些数据包含特殊对象（如函数、Symbol），
+ *     这些数据不能直接塞进 Redux。所以这里关闭了可序列化检查。
  */
 const store = configureStore({
     reducer: {
-        room: roomSlice,    // 房间状态 reducer
-        device: deviceSlice,  // 设备状态 reducer
+        room: roomSlice,    // 房间档案（通话状态、AI状态、字幕历史等）
+        device: deviceSlice,  // 设备档案（麦克风、摄像头、权限状态）
     },
     middleware: (getDefaultMiddleware) =>
         getDefaultMiddleware({
             serializableCheck: false,
+            // 关闭可序列化检查，因为 RTC SDK 返回的数据里可能有不可序列化的对象
         }),
 });
 
 /**
  * 【导出】全局唯一的 Redux Store 实例
  *
- * 【典型场景】
- *   // 读取状态（不推荐在组件外使用，推荐用 useSelector）
- *   const state = store.getState();
+ * 整个应用只有这一个 store 实例，就像公司只有一个档案室。
+ * 任何地方 import 它，用的都是同一个。
  *
- *   // 发送 action（不推荐在组件外使用，推荐用 useDispatch）
- *   store.dispatch({ type: 'room/updateScene', payload: 'Custom' });
+ * 【使用注意】
+ *   组件里推荐用 useSelector / useDispatch（React-Redux 封装好的钩子）
+ *   不用自己每次都 store.getState()，那样在 React 里不会触发重新渲染
  */
 export default store;

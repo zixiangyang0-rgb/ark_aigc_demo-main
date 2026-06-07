@@ -3,67 +3,56 @@
  * SPDX-license-identifier: BSD-3-Clause
  *
  * =============================================================
- * API 配置定义文件：定义需要调用的后端接口列表
+ * API 接口清单：告诉前端"你都能调哪些后端接口"
  * =============================================================
  *
- * 【泛化描述】本文件定义了前端要调用的所有后端接口：
- *   1. BasicAPIs : 基础接口（获取场景列表）
- *   2. AigcAPIs  : AI 对话相关接口（开始通话、结束通话）
+ * 想象一下：你去餐厅吃饭，服务员递给你一份菜单。
+ * 这份菜单就是"接口清单"——告诉你有哪些菜可以点。
+ * 前端拿到这份清单，就知道能调哪些接口、怎么调。
  *
- * 【典型场景】
- *   - 页面加载时，前端调用 BasicAPIs 中的 getScenes 获取场景配置
- *   - 用户点击"通话"按钮，前端调用 AigcAPIs 中的 StartVoiceChat
- *   - 用户点击"结束"按钮，前端调用 AigcAPIs 中的 StopVoiceChat
+ * 本项目有两类接口：
+ *   1. BasicAPIs（基础接口）：页面刚加载时获取场景配置
+ *   2. AigcAPIs（AI对话接口）：开始通话、结束通话
  */
 
 'use strict';
 
 /**
- * 【字段含义】基础接口列表
+ * 基础接口：顾名思义，最基础的接口
  *
- * 【泛化描述】每个接口用 action（操作名）、apiPath（接口路径）、method（HTTP 方法）来描述
+ * 就像餐厅菜单上的"茶水和小菜"，不是主菜但必须有。
  *
- * 【字段具体含义】
- *   action  : 操作名称，后端据此判断要执行什么逻辑
- *   apiPath : 接口路径，前端请求会发到 AIGC_PROXY_HOST + apiPath
- *   method  : HTTP 方法（get=GET，post=POST）
- *
- * 【典型场景】
- *   getScenes:
- *     → 前端请求: POST http://localhost:3001/getScenes
- *     → 后端返回: { scenes: [...] }（场景列表）
+ * 接口只有一个：getScenes（获取场景列表）
+ *   - 页面一打开，前端就调这个接口，把所有可用的 AI 人设拉下来
+ *   - 比如有"课程顾问"、"售后客服"等不同场景
  */
 export const BasicAPIs = [
     {
-        action: 'getScenes',    // 获取场景列表
-        apiPath: '/getScenes',  // 接口路径
-        method: 'post',         // HTTP 方法
+        action: 'getScenes',    // 场景列表接口
+        apiPath: '/getScenes',  // 对应的 URL 路径
+        method: 'post',         // 用 POST 方法调
     },
 ] as const;
 
 
 /**
- * 【字段含义】AI 语音对话相关接口列表
+ * AI 语音对话接口：负责"通话"这件事的开始和结束
  *
- * 【典型场景】
- *   StartVoiceChat:
- *     → 前端请求: POST http://localhost:3001/proxy?Action=StartVoiceChat&Version=2024-12-01
- *     → 后端转发给火山引擎 RTC → 开始 AI 对话
- *     → 后端返回: RTC 的响应（包含 TaskId 等信息）
+ * 就像打电话：
+ *   - 拨号（拨出去）= StartVoiceChat（开始 AI 对话）
+ *   - 挂断（对方挂断或你主动挂）= StopVoiceChat（停止 AI 对话）
  *
- *   StopVoiceChat:
- *     → 前端请求: POST http://localhost:3001/proxy?Action=StopVoiceChat&Version=2024-12-01
- *     → 后端转发给火山引擎 RTC → 结束 AI 对话
- *     → 后端返回: RTC 的响应
+ * 注意：这两个接口都走同一个 URL（/proxy），
+ * 真正区分"开始还是停止"的是 URL 参数里的 Action 字段。
  */
 export const AigcAPIs = [
     {
-        action: 'StartVoiceChat',  // 开始 AI 语音对话
-        apiPath: '/proxy',         // 统一走 /proxy 接口（后端再根据 Action 参数分发）
+        action: 'StartVoiceChat',  // 开始 AI 对话（拨号）
+        apiPath: '/proxy',         // 统一走 /proxy，后端根据 Action 参数分辨
         method: 'post',
     },
     {
-        action: 'StopVoiceChat',   // 停止 AI 语音对话
+        action: 'StopVoiceChat',   // 停止 AI 对话（挂断）
         apiPath: '/proxy',
         method: 'post',
     },

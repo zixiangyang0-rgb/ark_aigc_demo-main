@@ -1,88 +1,302 @@
-# 交互式AIGC场景 AIGC Demo
+# 交互式 AIGC 场景 —— AIGC Demo
 
-此 Demo 为简化版本, 如您有 1.5.x 版本 UI 的诉求, 可切换至 1.5.1 分支。
-跑通阶段时, 无须关心代码实现，仅需按需完成 `Server/scenes/*.json` 的场景信息填充即可。
+> **友情提示：** 这个 Demo 是一个简化版本。如果你正在使用 1.5.x 版本的 UI，可以切换到 `1.5.1` 分支。
 
-## 简介
-- 在 AIGC 对话场景下，火山引擎 AIGC-RTC Server 云端服务，通过整合 RTC 音视频流处理，ASR 语音识别，大模型接口调用集成，以及 TTS 语音生成等能力，提供基于流式语音的端到端AIGC能力链路。
-- 用户只需调用基于标准的 OpenAPI 接口即可配置所需的 ASR、LLM、TTS 类型和参数。火山引擎云端计算服务负责边缘用户接入、云端资源调度、音视频流压缩、文本与语音转换处理以及数据订阅传输等环节。简化开发流程，让开发者更专注在对大模型核心能力的训练及调试，从而快速推进AIGC产品应用创新。     
-- 同时火山引擎 RTC拥有成熟的音频 3A 处理、视频处理等技术以及大规模音视频聊天能力，可支持 AIGC 产品更便捷的支持多模态交互、多人互动等场景能力，保持交互的自然性和高效性。 
+> **新手必看：** 在跑通这个项目的阶段，你完全不需要关心代码是怎么写的！你只需要按照需求，往 `Server/scenes/*.json` 这个文件里填入场景相关的信息就行了。就像填表格一样，照着要求填就好了。
 
-## 【必看】环境准备
-**Node 版本: 16.0+**
+---
 
-### 1. 运行环境
-需要准备两个 Terminal，分别启动服务端和前端页面。
+## 这是个什么东西？先来打个比方
 
-### 2. 服务开通
-开通 ASR、TTS、LLM、RTC 等服务，可参考 [开通服务](https://www.volcengine.com/docs/6348/1315561?s=g) 进行相关服务的授权与开通。
+你有没有用过那种"智能音箱"？比如你跟小爱同学说"今天天气怎么样"，它不仅能听懂你说的话，还能用语音回答你。
 
-### 3. 场景配置
-`Server/scenes/*.json`
+那"数字人"呢？就像你在银行、商场看到的那种大屏幕上的虚拟人——你能跟它说话，它也能看着你、跟你对话，甚至还有表情和动作。
 
-您可以自定义具体场景, 并按需根据模版填充 `SceneConfig`、`AccountConfig`、`RTCConfig`、`VoiceChat` 中需要的参数。
+**这个 Demo 要做的事情，就是让你能快速搭建一个这样的智能对话系统。** 具体来说，它能：
 
-Demo 中以 `Custom` 场景为例，您可以自行新增场景。
+- **听懂你说话**（ASR 语音识别）：就像你对着 Siri 说话，它能把你说的转换成文字
+- **理解你想干什么**（LLM 大模型）：把文字交给大模型（类似 ChatGPT），让它想一想该怎么回答
+- **用自然的声音回应你**（TTS 语音生成）：把文字再转成语音说出来
+- **实时音视频通话**（RTC）：支持视频通话、多人互动等高级场景
 
-注意：
-- `SceneConfig`：场景的信息，例如名称、头像等。
-- `AccountConfig`：场景下的账号信息，https://console.volcengine.com/iam/keymanage/ 获取 AK/SK。
-- `RTCConfig`：场景下的 RTC 配置。
-    - AppId、AppKey 可从 https://console.volcengine.com/rtc/aigc/listRTC 中获取。
-    - RoomId、UserId 可自定义也可不填，交由服务端生成。
-- `VoiceChat`: 场景下的 AIGC 配置。
-    - 可参考 https://www.volcengine.com/docs/6348/1558163 中参数描述，完整填写参数内容。
-    - 可通过 [快速跑通 Demo](https://console.volcengine.com/rtc/aigc/run?s=g) 快速获取参数, 跑通后点击右上角 `接入 API` 按钮复制相关代码贴到 JSON 配置文件中即可。
-## 快速开始
-请注意，服务端和 Web 端都需要启动, 启动步骤如下:
-### 服务端
-进到项目根目录
-#### 安装依赖
+换句话说，你不需要懂上面这些技术细节，只需要填几个配置文件，一个"能听、能看、能对话"的 AI 助手就搭建好了。
+
+---
+
+## 【必看】环境准备 —— 先把工具准备好
+
+### Node.js 版本要求
+
+> **Node 是什么？** 简单理解，Node.js 就是一个运行环境，让你的电脑能跑 JavaScript 代码（对，不只是网页上，服务器上也能跑）。就好比 Java 程序需要 JVM 一样，JavaScript 代码需要 Node.js。
+
+**你需要确保你的电脑上安装的是 Node 16.0 或更高版本。**
+
+查看版本的方法：打开终端（Mac 上叫"终端"，Windows 上叫"命令提示符"或 PowerShell），输入：
+
 ```shell
+node -v
+```
+
+如果显示的版本号低于 `v16.0.0`，那你需要先升级 Node.js。推荐用 [nvm](https://github.com/nvm-sh/nvm)（Mac/Linux）或 [nvm-windows](https://github.com/coreybutler/nvm-windows) 来管理多个 Node 版本，就像你手机上有多个微信账号一样，想用哪个版本就切换过去。
+
+### 1. 需要开几个"窗口"
+
+整个系统分两部分：**服务端** 和 **前端页面**。
+
+你可以理解成点外卖：
+- **服务端** = 厨房。负责接收订单（处理请求）、做菜（调用 AI 能力）、打包（返回结果）。
+- **前端页面** = 外卖 App。让你能直观地看到界面、点餐、跟骑手互动。
+
+所以你需要在电脑上**同时打开两个终端窗口**：
+- 一个用来跑服务端（厨房开火）
+- 一个用来跑前端页面（App 上线）
+
+两个都要开着，就像点外卖时厨房和配送都要同时在线一样。
+
+### 2. 服务开通 —— 先去"营业许可"
+
+在正式使用之前，你需要在火山引擎的平台上开通几个必要的服务。就好像你要开一家奶茶店，首先得先去相关部门注册一样。
+
+需要开通的服务有：
+- **ASR**（语音识别）：让机器能听懂你说的话
+- **TTS**（语音合成）：让机器能开口说话
+- **LLM**（大语言模型）：让机器有"大脑"，能理解、会思考
+- **RTC**（实时音视频）：让视频、音频能实时传输
+
+具体的开通步骤，可以参考 [开通服务](https://www.volcengine.com/docs/6348/1315561?s=g)。
+
+### 3. 场景配置 —— 告诉系统"你长什么样"
+
+这是最核心的操作，**也是你唯一需要做的事情**（至少在跑通阶段是这样）。
+
+配置文件在 `Server/scenes/*.json`，你可以把它想象成你给 AI 角色填的"人物档案卡"。
+
+里面需要填的内容分四大块：
+
+#### （1）SceneConfig —— AI 的基本信息
+就像给你的 AI 角色填一张名片：叫什么名字？头像用什么？性格是什么？打个比方，就像你在游戏里创建角色时，要给它起名字、选头像一样。
+
+#### （2）AccountConfig —— 你的账号凭证
+这里需要填你在火山引擎获取的 **AK（Access Key）** 和 **SK（Secret Key）**。
+
+> **听不懂？** 打个比方：
+> - AK 就像是你的用户名
+> - SK 就像是你的密码
+>
+> 这两个合在一起，就代表"你是你"，火山引擎用这个来判断你有没有权限使用它的服务。
+>
+> 去哪里找？访问 https://console.volcengine.com/iam/keymanage/
+
+#### （3）RTCConfig —— 实时通话的"房间"配置
+这里的配置决定了你的 AI 和用户之间的音视频"通话频道"是怎么建立的。
+
+- **AppId、AppKey**：可以理解成你的 RTC 服务的"应用编号"和"钥匙"。去 https://console.volcengine.com/rtc/aigc/listRTC 获取。
+- **RoomId、UserId**：可以理解成"房间号"和"用户编号"。就像 QQ 群有群号、每个成员有 QQ 号一样。你可以自己定一个数字，也可以留空让系统自动生成。
+
+#### （4）VoiceChat —— AI 的核心灵魂配置
+这里是真正决定 AI"有多聪明""声音好不好听"的地方。
+
+> **不知道怎么填？没关系！** 有两种方法：
+> 1. 认真看 [参数说明文档](https://www.volcengine.com/docs/6348/1558163)，一个一个参数研究明白。
+> 2. 更简单 —— 去 [快速跑通 Demo](https://console.volcengine.com/rtc/aigc/run?s=g)，在网页上点点点就能完成所有配置，跑通之后点右上角的 **"接入 API"** 按钮，把生成的代码复制下来，粘贴到 JSON 配置文件里就行了。就像填表单一样点点点，不用自己一个个参数去研究。
+
+---
+
+## 快速开始 —— 手把手启动项目
+
+**再次提醒：服务端和前端页面都要启动，缺一不可！**
+
+### 第一步：启动服务端（后台厨房）
+
+打开一个终端窗口，执行：
+
+```shell
+# 1. 进入项目根目录
 cd Server
+
+# 2. 安装依赖（就像搬家前要把行李打包好）
 yarn
-```
-#### 运行项目
-```shell
+
+# 3. 启动服务（就像厨房开始营业）
 yarn dev
 ```
 
-### 前端页面
-进到项目根目录
-#### 安装依赖
+如果看到类似 `Server running at http://localhost:xxx` 这样的提示，说明服务端启动成功了。
+
+### 第二步：启动前端页面（外卖 App 上线）
+
+再打开**另一个**终端窗口（第一个不要关），执行：
+
 ```shell
+# 1. 进入项目根目录
+# （如果你的终端还在 Server 目录，需要退回去）
+cd ..
+
+# 2. 安装依赖
 yarn
-```
-#### 运行项目
-```shell
+
+# 3. 启动前端
 yarn dev
 ```
 
-### 常见问题
-| 问题 | 解决方案 |
-| :-- | :-- |
-| 如何使用第三方模型、Coze Bot | 模型相关配置代码对应目录 `src/config/scenes/` 下json 文件，填写对应官方模型/ Coze/ 第三方模型的参数后，可点击页面上的 "修改 AI 人设" 进行切换。 |
-| **启动智能体之后, 对话无反馈，或者一直停留在 "AI 准备中, 请稍侯"；在启用数字人的情况下，一直停留在“数字人准备中，请稍候”** | <li>可能因为控制台中相关权限没有正常授予，请参考[流程](https://www.volcengine.com/docs/6348/1315561?s=g)再次确认下是否完成相关操作。此问题的可能性较大，建议仔细对照是否已经将相应的权限开通。</li><li>参数传递可能有问题, 例如参数大小写、类型等问题，请再次确认下这类型问题是否存在。</li><li>相关资源可能未开通或者用量不足/欠费，请再次确认。</li><li>**请检查当前使用的模型 ID / 数字人 AppId / Token 等内容都是正确且可用的。**</li><li>数字人服务有并发限制，当达到并发限制时，同样会表现为一直停留在“数字人准备中”状态</li> |
-| **浏览器报了 `Uncaught (in promise) r: token_error` 错误** | 请检查您填在项目中的 RTC Token 是否合法，检测用于生成 Token 的 UserId、RoomId 以及 Token 本身是否与项目中填写的一致；或者 Token 可能过期, 可尝试重新生成下。 |
-| **[StartVoiceChat]Failed(Reason: The task has been started. Please do not call the startup task interface repeatedly.)** 报错 | 如果设置的 RoomId、UserId 为固定值，重复调用 startAgent 会导致出错，只需先调用 stopAgent 后再重新 startAgent 即可。 |
-| 为什么麦克风、摄像头开启失败？浏览器报了`TypeError: Cannot read properties of undefined (reading 'getUserMedia')` | 检查当前页面是否为[安全上下文](https://developer.mozilla.org/zh-CN/docs/Web/Security/Secure_Contexts)（简单来说，检查当前页面是否为 `localhost` 或者 是否为 https 协议）。浏览器[限制](https://developer.mozilla.org/zh-CN/docs/Web/Security/Secure_Contexts/features_restricted_to_secure_contexts) `getUserMedia` 只能在安全上下文中使用。 |
-| 为什么我的麦克风正常、摄像头也正常，但是设备没有正常工作? | 可能是设备权限未授予，详情可参考 [Web 排查设备权限获取失败问题](https://www.volcengine.com/docs/6348/1356355?s=g)。 |
-| 接口调用时, 返回 "Invalid 'Authorization' header, Pls check your authorization header" 错误 | `Server/app.js` 中的 AK/SK 不正确 |
-| 什么是 RTC | **R**eal **T**ime **C**ommunication, RTC 的概念可参考[官网文档](https://www.volcengine.com/docs/6348/66812?s=g)。 |
-| 不清楚什么是主账号，什么是子账号 | 可以参考[官方概念](https://www.volcengine.com/docs/6257/64963?hyperlink_open_type=lark.open_in_browser&s=g) 。|
-| 我有自己的服务端了, 我应该怎么让前端调用我的服务端呢 | 修改 `src/config/index.ts` 中的 `AIGC_PROXY_HOST` 请求域名和接口并在 `src/app/api.ts` 中修改接口参数配置 `APIS_CONFIG` |
+如果一切顺利，你就能在浏览器里打开页面看到一个交互界面了。
 
-如果有上述以外的问题，欢迎联系我们反馈。
+---
 
-### 相关文档
-- [场景介绍](https://www.volcengine.com/docs/6348/1310537?s=g)
-- [Demo 体验](https://www.volcengine.com/docs/6348/1310559?s=g)
-- [场景搭建方案](https://www.volcengine.com/docs/6348/1310560?s=g)
+## 常见问题解答
+
+下面列出了大家最容易遇到的问题，找到你的问题直接看解决方案就行。
+
+---
+
+**Q：我想用第三方模型（比如第三方的 GPT、Coze Bot），可以吗？**
+
+> **A：完全可以！** 这个 Demo 支持各种模型。
+>
+> 配置方法很简单：在 `src/config/scenes/` 目录下找到对应的 json 配置文件，按照第三方模型或 Coze 官方文档填好参数，保存之后在页面上点击 **"修改 AI 人设"** 按钮就能切换了。
+>
+> 就像你同时关注了很多公众号，现在想换一个人回复你，点一下切换就行。
+
+---
+
+**Q：启动 AI 之后，对话没反应，或者一直显示"AI 准备中，请稍候"……**
+
+> **A：这个问题最常见，原因也最多，按下面顺序排查：**
+>
+> **原因一：服务权限没开通（最常见！）**
+>
+> 去火山引擎控制台，检查 ASR、TTS、LLM、RTC 这些服务有没有都开通。这就像你去网吧上网，得先刷卡才能开机一样。
+>
+> **原因二：参数填错了**
+>
+> 比如大小写不对（中英文冒号、逗号）、数字和字母写混了、参数类型填错了。仔细检查一下。
+>
+> **原因三：账户欠费了**
+>
+> 服务开通着，但账户里没钱了…… 就像手机欠费了打不了电话一样。
+>
+> **原因四：关键的 ID / Token 填错了**
+>
+> 检查你填的模型 ID、数字人 AppId、Token 等是否完全正确。
+>
+> **原因五：数字人有并发限制**
+>
+> 如果用数字人功能，当前使用的人太多达到了上限，新的人就进不来了。
+
+---
+
+**Q：浏览器报错 `Uncaught (in promise) r: token_error`**
+
+> **A：这说明 RTC Token 验证失败了。**
+>
+> 可能的原因：
+> - RTC Token 生成时用的 UserId、RoomId 和你在项目里填的不一致
+> - Token 过期了
+>
+> 就像你进公司刷门禁卡，卡过期了刷不开。或者你用的是 A 楼的卡，却想去 B 楼。
+>
+> **解决方案：** 重新生成一个有效的 Token，确保生成 Token 时用的 UserId、RoomId 和项目配置里填的完全一致。
+
+---
+
+**Q：报错 `[StartVoiceChat]Failed(Reason: The task has been started. Please do not call the startup task interface repeatedly.)`**
+
+> **A：重复启动了。**
+>
+> 如果你设置的 RoomId 和 UserId 是固定值，然后反复点"开始对话"，就会触发这个错误。
+>
+> **解决方案：** 在重新开始之前，先点一下"停止对话"（stopAgent），把之前的会话关掉，再重新开始。
+>
+> 就像打电话时要先挂断上一个电话，才能打下一个。
+
+---
+
+**Q：麦克风、摄像头开不起来？浏览器报错 `TypeError: Cannot read properties of undefined (reading 'getUserMedia')`**
+
+> **A：这是因为你的页面不是在"安全环境"下运行的。**
+>
+> 浏览器的麦克风和摄像头权限，只允许在"安全上下文"中使用。
+>
+> 什么是安全上下文？简单说就是：
+> - `localhost` —— 本地开发环境，✅ 安全
+> - `https://` 开头的网址 —— 加密连接，✅ 安全
+> - `http://` 开头的网址 —— 未加密，❌ 不安全
+>
+> 所以如果你的页面地址栏不是 `localhost` 开头也不是 `https` 开头，浏览器会拒绝访问摄像头和麦克风。
+>
+> **解决方案：** 确保你访问的是 `http://localhost:xxxx` 或者配置好了 HTTPS。
+
+---
+
+**Q：麦克风正常、摄像头也正常，但设备就是没声音/没画面？**
+
+> **A：可能是设备权限的问题。**
+>
+> 虽然浏览器层面的权限给了，但操作系统层面可能还有限制。
+>
+> 详细排查方法请参考 [Web 排查设备权限获取失败问题](https://www.volcengine.com/docs/6348/1356355?s=g)。
+
+---
+
+**Q：接口报错 "Invalid 'Authorization' header, Pls check your authorization header"**
+
+> **A：服务端用的 AK/SK 不对。**
+>
+> 去 `Server/app.js` 里检查一下 AK 和 SK 是否正确填写了。
+>
+> 就像你登录账号时密码错了，系统就不让你进。
+
+---
+
+**Q：RTC 是什么？**
+
+> **A：RTC = Real Time Communication，即实时通信。**
+>
+> 简单说就是让你能"实时"地打音视频电话的技术，跟微信语音/视频通话、腾讯会议用的是一个原理。
+>
+> 更详细的解释请看[官方文档](https://www.volcengine.com/docs/6348/66812?s=g)。
+
+---
+
+**Q：主账号和子账号是什么？**
+
+> **A：主账号** 就是这个云服务账户的"户主"，拥有最高权限，可以做任何操作。
+>
+> **子账号** 是主账号创建的"员工账号"，权限由主账号分配，只能做被允许的事情。
+>
+> 就像公司的法人代表（主账号）和部门员工（子账号）的区别。
+>
+> 不清楚的话可以看[官方概念说明](https://www.volcengine.com/docs/6257/64963?hyperlink_open_type=lark.open_in_browser&s=g)。
+
+---
+
+**Q：我自己已经有服务端了，想让前端连接我自己的服务端，该怎么改？**
+
+> **A：很简单，两步搞定：**
+>
+> 1. 在 `src/config/index.ts` 里修改 `AIGC_PROXY_HOST` 的值，把它改成你的服务端地址
+> 2. 在 `src/app/api.ts` 里根据你的接口规范修改 `APIS_CONFIG` 的参数配置
+>
+> 就像原来接的是 A 公司的水管，现在想换成 B 公司的，只需要把接口处的接头换一下就行。
+
+---
+
+如果以上问题都没有解决你的情况，欢迎联系我们反馈，我们会帮你进一步排查。
+
+---
+
+## 相关文档
+
+- [场景介绍](https://www.volcengine.com/docs/6348/1310537?s=g) —— 了解更多关于这个 Demo 能做什么
+- [Demo 体验](https://www.volcengine.com/docs/6348/1310559?s=g) —— 快速在线体验效果
+- [场景搭建方案](https://www.volcengine.com/docs/6348/1310560?s=g) —— 从零搭建的完整方案
+
+---
 
 ## 更新日志
 
 ### OpenAPI 更新
-参考 [OpenAPI 更新](https://www.volcengine.com/docs/6348/1544162) 中与 实时对话式 AI 相关的更新内容。
+参考 [OpenAPI 更新](https://www.volcengine.com/docs/6348/1544162) 中与实时对话式 AI 相关的更新内容。
 
 ### Demo 更新
 
@@ -94,9 +308,9 @@ yarn dev
 - 2025-06-26
     - 修复进房有问题的 BUG
 - 2025-06-23
-    - 简化 Demo 使用, 配置归一化。
-    - 删除无用组件。
-    - 追加服务端 README。
+    - 简化 Demo 使用，配置归一化
+    - 删除无用组件
+    - 追加服务端 README
 - 2025-06-18
     - 更新 RTC Web SDK 版本至 4.66.16
     - 更新 UI 和参数配置方式
