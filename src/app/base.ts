@@ -3,14 +3,20 @@
  * SPDX-license-identifier: BSD-3-Clause
  *
  * =============================================================
- * API 请求底层函数：定义 GET/POST 请求的核心逻辑和结果处理
+ *  API 请求底层函数 —— 定义 GET/POST 请求的核心逻辑和结果处理
  * =============================================================
  *
- * 【泛化描述】本文件定义了发起 HTTP 请求的核心工具：
+ * 【用大白话讲】本文件定义了发起 HTTP 请求的核心工具：
  *   1. requestGetMethod  : 发起 GET 请求
  *   2. requestPostMethod : 发起 POST 请求
  *   3. resultHandler    : 统一处理响应（检查错误、提取数据）
  *   4. generateAPIs     : 根据配置自动生成 API 调用函数
+ *
+ * 【生活中的比方】
+ *   把 API 请求想象成"订外卖"：
+ *   - requestGetMethod / requestPostMethod = 你打电话给餐厅下单
+ *   - resultHandler = 餐厅告诉你"送到了"或者"没货了"
+ *   - generateAPIs = 外卖平台根据菜单自动生成下单按钮
  *
  * 【典型场景】
  *   - 前端调用 getScenes 时 → requestPostMethod → fetch 发送请求 → resultHandler 解析结果
@@ -29,6 +35,7 @@ import type { RequestResponse, ApiConfig, ApiNames, Apis } from './type';
 
 /**
  * 【类型含义】HTTP Header 的字典类型
+ * 就是一堆 key-value 对，比如 'Content-Type': 'application/json'
  *
  * 【典型场景】
  *   const headers: Headers = { 'Content-Type': 'application/json', 'Authorization': 'Bearer xxx' };
@@ -73,6 +80,10 @@ export type DeepPartial<T> = {
  *   const getScenes = requestGetMethod({ action: 'getScenes' });
  *   const result = await getScenes({ page: 1, size: 10 });
  *   // → GET http://xxx:3001?Action=getScenes&page=1&size=10
+ *
+ * 【生活中的比方】
+ *   就像你办了一张会员卡（requestGetMethod），
+ *   每次买东西（调用返回的函数）出示这张卡就行，不用每次都填表。
  */
 export const requestGetMethod = ({
     action,
@@ -121,6 +132,10 @@ export const requestGetMethod = ({
  *   const result = await startChat({ SceneID: 'Custom' });
  *   // → POST http://xxx:3001/proxy?Action=StartVoiceChat
  *   //    Body: { SceneID: 'Custom' }
+ *
+ * 【生活中的比方】
+ *   就像你填了一张订单表（body 里放参数），
+ *   交给外卖小哥（POST 方法）送到餐厅。
  */
 export const requestPostMethod = ({
     action,
@@ -172,6 +187,11 @@ export const requestPostMethod = ({
  *   const result = resultHandler(data);
  *   // → 成功时返回 result
  *   // → 失败时弹出错误提示并 throw new Error(...)
+ *
+ * 【生活中的比方】
+ *   就像外卖送达时：
+ *   - "您的订单到了" → 返回餐品（Result）
+ *   - "不好意思，餐厅没货了" → 弹出提示并退款（throw Error）
  */
 export const resultHandler = (res: RequestResponse) => {
     const { Result, ResponseMetadata } = res || {};
@@ -228,6 +248,12 @@ export const resultHandler = (res: RequestResponse) => {
  *   const VoiceChatAPIs = generateAPIs(AigcAPIs);
  *   VoiceChatAPIs.StartVoiceChat({ SceneID: 'Custom' })  // 开始通话
  *   VoiceChatAPIs.StopVoiceChat({ SceneID: 'Custom' })   // 结束通话
+ *
+ * 【生活中的比方】
+ *   就像外卖平台根据菜单自动生成下单按钮：
+ *   - 菜单（apiConfigs）列出了所有菜
+ *   - 按钮（返回的函数）帮你自动下单
+ *   - 你不需要知道厨房怎么做，只要按按钮就行
  */
 export const generateAPIs = <T extends readonly ApiConfig[]>(apiConfigs: T) =>
     apiConfigs.reduce<Apis<T>>((store, cur) => {

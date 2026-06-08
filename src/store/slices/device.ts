@@ -3,13 +3,13 @@
  * SPDX-license-identifier: BSD-3-Clause
  *
  * =============================================================
- * 设备状态管理模块：管理麦克风、摄像头等本地媒体设备的状态
+ *  设备状态管理模块 —— 管理麦克风、摄像头等本地媒体设备的状态
  * =============================================================
  *
- * 【开门见山】这个模块管理"本地设备"的状态——你电脑上的麦克风、摄像头有哪些，
+ * 【用大白话讲】这个模块管理"本地设备"的状态——你电脑上的麦克风、摄像头有哪些，
  *            当前选的是哪个，浏览器有没有授权你能用它们。
  *
- * 【生活比喻】
+ * 【生活中的比方】
  *            把设备状态想象成"手机设置里的蓝牙管理"：
  *            - 蓝牙设备列表：当前连了几个设备（麦克风列表、摄像头列表）
  *            - 当前连接的设备：正在用哪个麦克风说话
@@ -111,7 +111,7 @@ export const DeviceSlice = createSlice({
              *   payload.audioInputs?: MediaDeviceInfo[]  // 新的麦克风列表（可选）
              *   payload.videoInputs?: MediaDeviceInfo[]  // 新的摄像头列表（可选）
              *
-             * 【生活比喻】
+             * 【生活中的比方】
              *   就像你插了一个新的蓝牙耳机 → 手机自动刷新蓝牙设备列表
              *   → 显示"新耳机已连接"
              *
@@ -142,7 +142,7 @@ export const DeviceSlice = createSlice({
              *   payload.selectedCamera?: string      // 新选中的摄像头 ID
              *   payload.selectedMicrophone?: string  // 新选中的麦克风 ID
              *
-             * 【生活比喻】
+             * 【生活中的比方】
              *   就像手机蓝牙设置里，你从"AirPods Pro"切换到"beats耳机"
              *   → 系统自动连到新设备，旧设备断开
              *
@@ -185,7 +185,7 @@ export const DeviceSlice = createSlice({
              *   action.payload.audio : 麦克风权限（true=允许，false=拒绝）
              *   action.payload.video : 摄像头权限（true=允许，false=拒绝）
              *
-             * 【生活比喻】
+             * 【生活中的比方】
              *   就像你安装一个新 App，手机问"允许访问通讯录吗"
              *   你点了"允许" → 通讯录权限 = true
              *   你点了"不允许" → 通讯录权限 = false
@@ -246,7 +246,7 @@ export const medias = [DeviceType.Microphone];
  *   DeviceType.Microphone : "microphone"  → 麦克风
  *   DeviceType.Camera    : "camera"       → 摄像头
  *
- * 【生活比喻】
+ * 【生活中的比方】
  *   就像手机设置里的"蓝牙设备"图标旁边写着"耳机"、"键盘"、"手环"
  *   MediaName 就是把枚举值变成人类能看懂的名字
  *

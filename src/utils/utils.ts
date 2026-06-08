@@ -3,12 +3,12 @@
  * SPDX-license-identifier: BSD-3-Clause
  *
  * =============================================================
- * 工具函数模块：提供 TLV 编解码、移动端检测等通用功能
+ *  工具函数模块 —— 提供 TLV 编解码、移动端检测等通用功能
  * =============================================================
  *
- * 【泛化描述】本文件提供各种通用的小工具函数：
- *   1. string2tlv / tlv2String : TLV 格式的编码和解码（用于 RTC 二进制消息）
- *   2. isMobile / useIsMobile   : 检测用户是否使用移动设备
+ * 【用大白话讲】这个文件是一堆"小工具"，散装的各种功能函数。
+ *   比如：把数据转成二进制格式、检测用户是不是用手机访问的。
+ *   这些函数太小太杂，不值得单独开文件，就都塞这里了。
  *
  * 【核心概念 - TLV 格式】
  *   TLV = Type-Length-Value，即"类型-长度-值"的固定格式。
@@ -38,11 +38,10 @@ import { useEffect, useState } from 'react';
  *
  * @returns ArrayBuffer，二进制数据（可用于 RTC 的 sendUserBinaryMessage）
  *
- * 【泛化描述】把"控制命令"（如打断指令）打包成二进制格式，发给 RTC。
- *            比如要发一个打断指令：
- *              Type   = "ctrl"
- *              Value  = '{"Command":"interrupt","InterruptMode":0}'
- *              → 打包成二进制后 sendUserBinaryMessage 发出
+ * 【用大白话讲】
+ *   这个函数把"一封信"装进"标准快递包裹"里。
+ *   包裹外面贴标签写"是什么类型"和"里面有多长"，里面才是真正的信。
+ *   这样收件人拆包裹时，就知道先看标签，再按长度拆开。
  *
  * 【TLV 格式图解】
  *   |--- 4字节 ---|-- 4字节 --|--- N字节 ---|
@@ -52,6 +51,13 @@ import { useEffect, useState } from 'react';
  * 【典型场景】
  *   const buffer = string2tlv('{"Command":"interrupt"}', 'ctrl');
  *   RtcClient.engine.sendUserBinaryMessage('AiAgent', buffer);
+ *
+ * 【生活中的比方】
+ *   你要给朋友寄一封情书：
+ *   - 先量一下信有多重、多大（Length）
+ *   - 贴个标签写上"情书"（Type = "ctrl"）
+ *   - 把信装进信封里（Value）
+ *   - 寄出去
  */
 export const string2tlv = (str: string, type: string) => {
     // Step 1: 把 type（字符串）转成 4 字节的 Buffer
@@ -103,9 +109,9 @@ export const string2tlv = (str: string, type: string) => {
  *
  * @returns { type: string, value: string } - 解码后的类型和内容
  *
- * 【泛化描述】收到 RTC 的二进制消息时，用这个函数解析出里面的内容。
- *            比如收到 AI 发来的字幕消息：
- *              二进制 → tlv2String → { type: "subv", value: '{"text":"你好"}' }
+ * 【用大白话讲】
+ *   这个函数是 string2tlv 的逆过程。
+ *   收到一个快递包裹，拆开看看是什么类型、里面装的是什么。
  *
  * 【TLV 格式图解】
  *   |--- 4字节 ---|-- 4字节 --|--- N字节 ---|
@@ -119,6 +125,12 @@ export const string2tlv = (str: string, type: string) => {
  *           console.log('字幕:', data.text);
  *       }
  *   });
+ *
+ * 【生活中的比方】
+ *   收到一个包裹：
+ *   1. 看标签，是"ctrl"类型（Type）
+ *   2. 看尺寸，是42字节长（Length）
+ *   3. 拆开信封，里面是 JSON 字符串（Value）
  */
 export const tlv2String = (tlvBuffer: ArrayBufferLike) => {
     // 1. 读取 Type（4字节）→ 转成字符串
@@ -153,14 +165,22 @@ export const tlv2String = (tlvBuffer: ArrayBufferLike) => {
  *
  * @returns boolean - true 表示是移动设备
  *
- * 【泛化描述】通过 User-Agent 判断浏览器在什么设备上运行。
- *            移动设备的 UA 通常包含 "Mobi"、"Android"、"iPhone" 等关键词。
- *            同时也检查屏幕宽度，小于 767px 也视为移动端。
+ * 【用大白话讲】
+ *   这个函数判断用户是用手机、平板还是电脑访问的。
+ *   通过检查浏览器的"User-Agent"字符串来判断。
+ *
+ * 【检测原理】
+ *   手机浏览器的 UA 通常包含 "Mobi"、"Android"、"iPhone" 等关键词。
+ *   同时也检查屏幕宽度，小于 767px 也视为移动端（因为有些平板浏览器会伪装成桌面版）。
  *
  * 【典型场景】
  *   if (isMobile()) {
  *       // 显示移动端优化过的 UI（如更大的按钮）
  *   }
+ *
+ * 【生活中的比方】
+ *   就像一个自动门，通过传感器判断来的是小孩还是大人，决定门开多大。
+ *   这个函数通过 UA 判断来的是手机还是电脑，决定显示什么布局。
  */
 export const isMobile = () =>
     /Mobi|Android|iPhone|iPad|Windows Phone/i.test(window.navigator.userAgent) ||
@@ -176,15 +196,19 @@ export const isMobile = () =>
  *
  * @returns boolean - 当前是否为移动设备（会随窗口大小变化而更新）
  *
- * 【泛化描述】useEffect 监听 window.resize 事件，
- *            当窗口宽度变化时重新检测，更新状态。
- *            组件使用这个 Hook 时，窗口大小变化会自动触发重新渲染。
+ * 【用大白话讲】
+ *   isMobile() 是一次性检测，useIsMobile() 会随着窗口变大变小自动更新。
+ *   比如用户把浏览器窗口从大变小，小到 767px 以下，状态会自动变成 true。
  *
  * 【典型场景】
  *   function MyComponent() {
  *       const mobile = useIsMobile();
  *       return mobile ? <MobileLayout /> : <DesktopLayout />;
  *   }
+ *
+ * 【生活中的比方】
+ *   isMobile() 就像量一次身高，量完就完了。
+ *   useIsMobile() 就像实时测量身高，你蹲下它就知道你矮了，站起来它就知道你高了。
  */
 export function useIsMobile() {
     const getIsMobile = () =>
