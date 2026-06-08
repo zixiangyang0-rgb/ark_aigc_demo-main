@@ -1,152 +1,43 @@
-/**
- * Copyright 2025 Beijing Volcano Engine Technology Co., Ltd. All Rights Reserved.
- * SPDX-license-identifier: BSD-3-Clause
- *
- * =============================================================
- * 场景配置文件：定义一个自定义 AI 助手的完整配置
- * =============================================================
- *
- * 【泛化描述】Custom.json 是 Node.js 后端 Server/scenes/ 目录下的场景配置文件。
- *            每个场景对应一个 JSON 文件，定义了该场景的：
- *            - AI 头像和名称（SceneConfig）
- *            - 火山引擎账号凭证（AccountConfig）
- *            - RTC 实时通信配置（RTCConfig）
- *            - 语音对话配置（VoiceChat）：包含 ASR、TTS、LLM、数字人等子配置
- *
- * 【典型场景】
- *   - 后端服务启动时 → 读取 scenes/ 下所有 JSON 文件 → 存入内存
- *   - 前端调用 getScenes 接口 → 返回所有场景配置
- *   - 用户选择某个场景 → 前端使用该场景的 RTCConfig + VoiceChat 配置
- *
- * 【字段具体含义】
- *   SceneConfig       → AI 头像和名称配置
- *   AccountConfig     → 火山引擎 AK/SK 凭证（用于签名 API 请求）
- *   RTCConfig         → RTC 实时通信配置（AppId、AppKey、RoomId、UserId、Token）
- *   VoiceChat         → 语音对话核心配置（ASR、TTS、LLM、数字人）
- */
-
-/**
- * SceneConfig：场景的 UI 配置
- *
- * 【字段含义】
- *   icon  → AI 头像图片的 URL 地址
- *   name  → AI 的显示名称（"自定义助手"）
- *
- * 【典型场景】
- *   前端在场景选择卡片上显示：<img src={icon} /> + {name}
- */
 {
   "SceneConfig": {
-    "icon": "https://lf3-rtc-demo.volccdn.com/obj/rtc-aigc-assets/DoubaoAvatar.png",
+    "icon": "https://lf-online-sdk.volccdn.com/obj/rtc-aigc-assets/DoubaoAvatar.png",
     "name": "自定义助手"
   },
-
-  /**
-   * AccountConfig：火山引擎账号凭证
-   *
-   * 【字段含义】
-   *   accessKeyId  → Access Key ID（访问密钥 ID）
-   *   secretKey    → Secret Access Key（访问密钥密码）
-   *
-   * 【典型场景】
-   *   后端使用 AK/SK 对向火山引擎 API 的请求进行 HMAC-SHA256 签名
-   *   获取地址：https://console.volcengine.com/iam/keymanage/
-   */
   "AccountConfig": {
-    "accessKeyId": "",
-    "secretKey": ""
-  },
-
-  /**
-   * RTCConfig：实时音视频通信配置
-   *
-   * 【字段含义】
-   *   AppId   → RTC 应用的唯一标识（在 RTC 控制台创建）
-   *   AppKey  → RTC 应用的密钥（与 AppId 配对）
-   *   RoomId  → 房间 ID（标识一个通话房间），可留空由后端自动生成
-   *   UserId  → 用户 ID（标识当前用户），可留空由后端自动生成
-   *   Token   → 加入房间的凭证，可留空由后端自动生成
-   *
-   * 【典型场景】
-   *   前端调用 RtcClient.joinRoom({ roomId, userId, token, appId })
-   *   → RTC SDK 连接到 RTC 服务器 → 加入指定房间
-   *   获取地址：https://console.volcengine.com/rtc/aigc/listRTC
-   */
-  "AccountConfig": {
-    "accessKeyId": "",
-    "secretKey": ""
+    "accessKeyId": "AKLTMGQxNmFkNWZlYTA0NGY2N2E2M2QyMDI5YWM0NGYzMzE",
+    "secretKey": "WlRJNE56aGhaRFEyWWpVNE5HTTVZVGt3WkdNNFpURTVPR0UzWm1ZNVpXRQ=="
   },
   "RTCConfig": {
-    "AppId": "",
-    "AppKey": "",
-    "RoomId": "",
-    "UserId": "",
+    "AppId": "6a20da5cbe3f270176911bf6",
+    "AppKey": "cbe5d91816644963a5cbb44783e91d5c",
+    "RoomId": "room_8f3k2m9p",
+    "UserId": "user_8f3k2m9p",
     "Token": ""
   },
-
-  /**
-   * VoiceChat：语音对话核心配置
-   *
-   * 【字段含义】
-   *   AppId      → 语音对话应用的 AppId
-   *   RoomId     → 语音对话的房间 ID
-   *   TaskId     → 语音对话任务的 ID（由后端创建后返回）
-   *   AgentConfig→ AI 代理配置（欢迎语、目标用户、是否开启对话状态回调）
-   *   Config     → 详细子配置（ASR、TTS、LLM、数字人）
-   *
-   * 【典型场景】
-   *   前端点击"通话"按钮 → 调用 startVoiceChat API
-   *   → 后端使用 VoiceChat 配置创建 AI 语音对话任务
-   *   → AI 接入 ASR（语音识别）、TTS（语音合成）、LLM（大语言模型）
-   *   → 用户可以和 AI 进行实时语音对话
-   */
   "VoiceChat": {
-    "AppId": "",
-    "RoomId": "",
+    "AppId": "6a20da5cbe3f270176911bf6",
+    "RoomId": "room_8f3k2m9p",
     "TaskId": "",
     "AgentConfig": {
-      "TargetUserId": [
-        ""
-      ],
+      "TargetUserId": ["user_8f3k2m9p"],
       "WelcomeMessage": "你好，我是小宁，有什么需要帮忙的吗？",
-      "UserId": "",
+      "UserId": "agent_8f3k2m9p",
       "EnableConversationStateCallback": true
     },
     "Config": {
-
-      /**
-       * ASRConfig：语音识别配置
-       *
-       * 【字段含义】
-       *   Provider        → 语音识别服务商（"volcano" = 火山引擎）
-       *   Mode            → 识别模式（"smallmodel" = 小模型，速度快）
-       *   AppId           → ASR 应用的 AppId
-       *   Cluster         → ASR 集群地址
-       */
       "ASRConfig": {
         "Provider": "volcano",
         "ProviderParams": {
           "Mode": "smallmodel",
-          "AppId": "",
+          "AppId": "6a20da5cbe3f270176911bf6",
           "Cluster": "volcengine_streaming_common"
         }
       },
-
-      /**
-       * TTSConfig：语音合成配置
-       *
-       * 【字段含义】
-       *   Provider         → 语音合成服务商（"volcano" = 火山引擎）
-       *   voice_type       → 音色选择（"BV001_streaming" = 小宁的声音）
-       *   speed_ratio      → 语速倍率（1 = 正常速度）
-       *   pitch_ratio      → 音调倍率（1 = 正常音调）
-       *   volume_ratio     → 音量倍率（1 = 正常音量）
-       */
       "TTSConfig": {
         "Provider": "volcano",
         "ProviderParams": {
           "app": {
-            "appid": "",
+            "appid": "6a20da5cbe3f270176911bf6",
             "cluster": "volc_tts"
           },
           "audio": {
@@ -157,19 +48,9 @@
           }
         }
       },
-
-      /**
-       * LLMConfig：大语言模型配置
-       *
-       * 【字段含义】
-       *   Mode        → LLM 模式（"ArkV3" = 火山引擎 ARK V3）
-       *   EndPointId  → ARK 模型的端点 ID
-       *   SystemMessages → 系统提示词（定义 AI 的人设和回答风格）
-       *   VisionConfig→ 视觉理解配置（Enable = false 表示不启用视觉能力）
-       */
       "LLMConfig": {
         "Mode": "ArkV3",
-        "EndPointId": "",
+        "EndPointId": "ep-20260604101530-bc7xw",
         "SystemMessages": [
           "你是小宁，性格幽默又善解人意。你在表达时需简明扼要，有自己的观点。"
         ],
@@ -177,18 +58,6 @@
           "Enable": false
         }
       },
-
-      /**
-       * AvatarConfig：数字人配置
-       *
-       * 【字段含义】
-       *   Enabled      → 是否启用数字人（false = 不启用）
-       *   AvatarType   → 数字人类型（"3min" = 3分钟数字人）
-       *   AvatarRole   → 数字人角色 ID
-       *   VideoBitrate → 视频码率（2000 kbps）
-       *   AvatarAppID  → 数字人服务的 AppId
-       *   AvatarToken  → 数字人服务的 Token
-       */
       "AvatarConfig": {
         "Enabled": false,
         "AvatarType": "3min",
@@ -198,17 +67,6 @@
         "AvatarAppID": "",
         "AvatarToken": ""
       },
-
-      /**
-       * InterruptMode：打断模式
-       *
-       * 【字段含义】
-       *   0 = 不允许打断
-       *   1 = 允许用户打断 AI 说话
-       *
-       * 【典型场景】
-       *   InterruptMode = 1 → 用户可以随时打断 AI → AI 停止当前输出，重新响应
-       */
       "InterruptMode": 0
     }
   }

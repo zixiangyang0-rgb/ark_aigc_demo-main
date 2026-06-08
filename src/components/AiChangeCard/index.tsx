@@ -1,57 +1,67 @@
-/**
+﻿/**
  * Copyright 2025 Beijing Volcano Engine Technology Co., Ltd. All Rights Reserved.
  * SPDX-license-identifier: BSD-3-Clause
  *
  * =============================================================
- * 场景选择卡片组件：展示可切换的 AI 人设/场景
+ * AI 场景选择卡片组件：展示所有可选的 AI 场景/角色
  * =============================================================
  *
  * 【泛化描述】AIChangeCard = AI Change Card（AI 选择卡片）。
- *            在入场页显示所有可用的 AI 人设/场景，
- *            用户点击后可以切换当前选中的场景。
+ *            这是入场页的"AI 场景选择区"：
+ *            - 显示当前选中的 AI 头像和名称
+ *            - 显示所有可选的 AI 场景标签
+ *            - 支持点击切换场景
+ *
+ * 【典型场景】
+ *   - 用户打开页面 → 显示当前 AI 头像 + 所有可选场景
+ *   - 用户点击某个场景 → 切换到该场景，更新 UI
  */
 
 'use strict';
 
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '@/store';
-import CheckScene from './CheckScene';
-import { SceneConfig, updateScene } from '@/store/slices/room';
 import { useScene } from '@/lib/useCommon';
-import style from './index.module.less';
+import { updateScene } from '@/store/slices/room';
+import CheckScene from './CheckScene';
+import styles from './index.module.less';
 
 function AIChangeCard() {
-    const { scene, sceneConfigMap } = useSelector((state: RootState) => state.room);
     const dispatch = useDispatch();
-    const { icon, isVision } = useScene();
-    const Scenes = Object.keys(sceneConfigMap).map(key => sceneConfigMap[key]);
+    const { id, icon, name } = useScene();
+    const sceneConfigMap = useSelector((state: RootState) => state.room.sceneConfigMap);
 
-    const handleChecked = (checkedScene: string) => {
-        dispatch(updateScene(checkedScene));
+    const handleSelectScene = (sceneId: string) => {
+        if (sceneId !== id) {
+            dispatch(updateScene(sceneId));
+        }
     };
 
     return (
-        <div className={style.card}>
-            <div className={style.avatar}>
-                <img id="avatar-card" src={icon} alt="Avatar" />
+        <div className={styles.card}>
+            {/* AI 头像 */}
+            <div className={styles.avatar}>
+                <img src={icon} alt={name || 'AI Avatar'} />
             </div>
-            <div className={style.title}>
-                <div>Hi，欢迎体验实时对话式 AI</div>
-                <div className={style.desc}>
-                    {isVision ? <>支持豆包 Vision 模型和 深度思考模型，</> : ''}
-                    超多对话场景等你开启
-                </div>
-            </div>
-            <div className={style.sceneContainer}>
-                {Scenes.map((key: SceneConfig) =>
+
+            {/* AI 名称 */}
+            <div className={styles.title}>{name}</div>
+
+            {/* AI 描述 */}
+            <div className={styles.desc}>支持豆包 Vision 模型和深度思考模型</div>
+
+            {/* 场景选项列表 */}
+            <div className={styles.sceneContainer}>
+                {Object.values(sceneConfigMap).map((scene) => (
                     <CheckScene
-                        key={key.name}
-                        icon={key.icon}
-                        title={key.name}
-                        checked={key.id === scene}
-                        onClick={() => handleChecked(key.id)}
+                        key={scene.id}
+                        sceneId={scene.id}
+                        name={scene.name}
+                        icon={scene.icon}
+                        isActive={scene.id === id}
+                        onClick={() => handleSelectScene(scene.id)}
                     />
-                )}
+                ))}
             </div>
         </div>
     );

@@ -1,34 +1,5 @@
-/**
- * Copyright 2025 Beijing Volcano Engine Technology Co., Ltd. All Rights Reserved.
- * SPDX-license-identifier: BSD-3-Clause
- *
- * =============================================================
- * Nodemon 配置文件：自动重启 Node.js 服务的监听规则
- * =============================================================
- *
- * 【泛化描述】nodemon.json 是 Nodemon 工具的配置文件。
- *            Nodemon 是一个监听文件变化自动重启 Node.js 服务的工具，
- *            常用于开发阶段，省去手动重启服务器的麻烦。
- *
- * 【字段具体含义 + 典型场景】
- *
- * 【watch】监听范围
- *   "." → 监听当前目录（Server/ 目录）下所有文件的变化
- *   典型场景：修改 app.js、token.js、util.js → Nodemon 自动重启服务
- *
- * 【ext】监听文件扩展名
- *   "js,json" → 只监听 .js 和 .json 文件的变化
- *   典型场景：修改 Custom.json 场景配置 → Nodemon 自动重启服务
- *
- * 【ignore】忽略的文件/目录
- *   "node_modules/*" → 不监听 node_modules 目录下的文件变化
- *   典型场景：npm install 时 node_modules 变化 → Nodemon 不会重启服务
- *
- * 【典型场景】
- *   npm run dev → 启动 Nodemon → 监听文件变化 → 文件变化时自动重启服务
- */
 {
-  "watch": ["."],                    // 监听当前目录（Server/）下所有文件
-  "ext": "js,json",                 // 只监听 .js 和 .json 文件
-  "ignore": ["node_modules/*"]       // 忽略 node_modules 目录
+  "watch": ["."],
+  "ext": "js,json",
+  "ignore": ["node_modules/*"]
 }

@@ -1,168 +1,156 @@
-/**
+﻿/**
  * Copyright 2025 Beijing Volcano Engine Technology Co., Ltd. All Rights Reserved.
  * SPDX-license-identifier: BSD-3-Clause
  *
  * =============================================================
- * 对话字幕组件：显示用户和 AI 的对话历史（字幕）
+ * 对话字幕组件：显示 AI 和用户的对话消息
  * =============================================================
  *
- * 【泛化描述】Conversation = 对话记录。这是房间页面的"字幕区"，
- *            显示用户和 AI 之间的对话历史。
- *            每收到一条 RTC 二进制消息（字幕），就追加到 msgHistory 里。
+ * 【泛化描述】Conversation = 对话字幕。
+ *            这是房间页面的"对话内容展示区"：
+ *            - 显示 AI 和用户的对话消息气泡
+ *            - 支持字幕模式（showSubtitle=true）和完整对话模式
+ *            - 流式消息打字效果
+ *            - 打断状态显示
  *
  * 【典型场景】
- *   AI 说："你好，我是懂小智"
- *   → dispatch(setHistoryMsg({ text: "你好，我是懂小智", user: "AiAgent" }))
- *   → msgHistory 更新 → Conversation 自动渲染出新的字幕
+ *   - AI 回复用户 → 显示带渐变边框的 AI 消息气泡
+ *   - 用户发送消息 → 显示灰色用户消息气泡
+ *   - AI 正在回复 → 显示跳动加载动画
+ *   - 字幕模式开启 → 显示上方的字幕卡片
  */
 
 'use strict';
 
-import React, { useRef, useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import { useSelector } from 'react-redux';
-import { Tag, Spin } from '@arco-design/web-react';
 import { RootState } from '@/store';
-import Loading from '@/components/Loading/HorizonLoading';
-import { isMobile } from '@/utils/utils';
 import { useScene } from '@/lib/useCommon';
-import USER_AVATAR from '@/assets/img/userAvatar.png';
 import styles from './index.module.less';
-import AIAvatarReadying from '@/components/AIAvatarLoading';
+import HorizonLoading from '@/components/Loading/HorizonLoading';
 
-// 用于生成消息组件的"渲染占位"（实际不使用）
-const lines: (string | React.ReactNode)[] = [];
+interface ConversationProps {
+    className?: string;
+    showSubtitle?: boolean;
+}
+
+interface SentenceItem {
+    id: string;
+    user: string;
+    content: string;
+    isComplete: boolean;
+    isInterrupted: boolean;
+}
 
 /**
- * 【组件含义】对话字幕组件
- *
- * @param props.className     - CSS 类名
- * @param props.showSubtitle - 是否显示字幕
+ * 【组件含义】对话字幕
  *
  * 【职责】
- *   1. 从 Redux 读取 msgHistory（对话历史）
- *   2. 渲染每条字幕（区分用户和 AI）
- *   3. 自动滚动到底部（最新消息）
- *   4. AI 未就绪时显示加载状态
+ *   1. 显示所有历史消息（msgHistory）
+ *   2. 显示当前正在输入的消息（currentConversation）
+ *   3. 流式打字效果（通过 definite 字段判断）
+ *   4. 打断状态视觉反馈
+ *
+ * 【布局说明】
+ *   - 最大宽度 70%，防止一行过长
+ *   - 用户消息靠左显示，AI 消息靠左显示
+ *   - AI 消息带渐变边框气泡
+ *   - 用户消息灰色背景气泡
  */
-function Conversation(props: React.HTMLAttributes<HTMLDivElement> & { showSubtitle: boolean }) {
-    const { className, showSubtitle, ...rest } = props;
+function Conversation(props: ConversationProps) {
+    const { className, showSubtitle = false } = props;
+    const listRef = useRef<HTMLDivElement>(null);
+
     const room = useSelector((state: RootState) => state.room);
-    const { msgHistory, isFullScreen } = room;
-    const { userId } = useSelector((state: RootState) => state.room.localUser);
-    const { isAITalking, isUserTalking, scene } = useSelector((state: RootState) => state.room);
-    const isAIReady = msgHistory.length > 0;  // AI 是否已就绪（有没有对话历史）
-    const containerRef = useRef<HTMLDivElement>(null);
-    const { botName, icon, isAvatarScene } = useScene();
+    const { msgHistory, currentConversation } = room;
+    const { botName } = useScene();
 
+    // 合并历史消息和当前消息为统一格式
+    // currentConversation 是 { [user: string]: { msg, definite } }，遍历取值
+    const currentMsgs = currentConversation ? Object.values(currentConversation) : [];
+    const hasCurrentInput = currentMsgs.length > 0;
+    const currentInput = hasCurrentInput ? currentMsgs[currentMsgs.length - 1] : null;
 
-    // ----------
-    // 自动滚动到最新消息
-    // ----------
+    const sentences: SentenceItem[] = [
+        // 已完成的历史消息
+        ...msgHistory.map((msg, index) => ({
+            id: `history-${index}`,
+            user: msg.user,
+            content: msg.value,
+            isComplete: true,
+            isInterrupted: msg.isInterrupted || false,
+        })),
+        // 当前正在输入的消息（未完成）
+        ...(currentInput && !currentInput.definite
+            ? [
+                  {
+                      id: 'current',
+                      user: botName,
+                      content: currentInput.msg,
+                      isComplete: false,
+                      isInterrupted: false,
+                  },
+              ]
+            : []),
+    ];
+
+    // 自动滚动到底部
     useEffect(() => {
-        const container = containerRef.current;
-        if (container) {
-            // scrollTop = scrollHeight - clientHeight → 滚动到底部
-            container.scrollTop = container.scrollHeight - container.clientHeight;
+        if (listRef.current) {
+            listRef.current.scrollTop = listRef.current.scrollHeight;
         }
-    }, [msgHistory.length]);  // msgHistory 变化时触发
+    }, [sentences.length, currentInput?.msg]);
 
-
-    // ----------
-    // 判断是否正在"加载中"（显示打字动画）
-    // ----------
-    /**
-     * 判断用户消息是否正在加载（显示打字动画）
-     */
-    const isUserTextLoading = (owner: string) => {
-        return owner === userId && isUserTalking;
+    // 判断消息是否来自 AI
+    const isFromBot = (user: string) => {
+        return user === botName || user.includes('voiceChat_');
     };
-
-    /**
-     * 判断 AI 消息是否正在加载（显示打字动画）
-     */
-    const isAITextLoading = (owner: string) => {
-        return (owner === botName || owner.includes('voiceChat_')) && isAITalking;
-    };
-
 
     return (
-        <div
-            ref={containerRef}
-            className={`${styles.conversation} ${className} ${isFullScreen ? styles.fullScreen : ''} ${
-                isMobile() ? styles.mobileConversation : ''
-            }`}
-            style={isAvatarScene && !isAIReady ? { justifyContent: 'center' } : {}}
-            {...rest}
-        >
-            {/* 渲染占位（未使用） */}
-            {lines.map((line) => line)}
+        <div ref={listRef} className={`${styles.conversation} ${className || ''}`}>
+            {/* 历史消息列表 */}
+            {sentences.map((sentence) => {
+                const fromBot = isFromBot(sentence.user);
 
-            {/* AI 未就绪：显示加载状态 */}
-            {!isAIReady ? (
-                <div className={styles.aiReadying}>
-                    {isAvatarScene ? (
-                        /* 数字人模式：显示数字人准备动画 */
-                        <AIAvatarReadying />
-                    ) : (
-                        /* 非数字人模式：显示普通加载 */
-                        <>
-                            <Spin size={16} className={styles['aiReading-spin']} />
-                            AI 准备中, 请稍侯
-                        </>
-                    )}
-                </div>
-            ) : ''}
-
-            {/* 渲染对话历史 */}
-            {(showSubtitle ? msgHistory : [])?.map(({ value, user, isInterrupted }, index) => {
-                const isUserMsg = user === userId;         // 是否是用户的消息
-                const isRobotMsg = user === botName || user.includes('voiceChat_');  // 是否是 AI 的消息
-
-                // 跳过非用户/非 AI 的消息
-                if (!isUserMsg && !isRobotMsg) {
-                    return '';
-                }
+                // 字幕模式且非 AI 消息 → 不显示
+                if (showSubtitle && !fromBot) return null;
 
                 return (
                     <div
-                        key={`msg-container-${index}`}
-                        className={styles.mobileLine}
-                        style={{ justifyContent: isUserMsg && isMobile() ? 'flex-end' : '' }}
+                        key={sentence.id}
+                        className={`${styles.sentence} ${fromBot ? styles.robot : styles.user}`}
+                        style={
+                            sentence.isInterrupted
+                                ? { opacity: 0.5, textDecoration: 'line-through' }
+                                : undefined
+                        }
                     >
-                        {/* 头像区域（PC 端显示） */}
-                        {!isMobile() && (
-                            <div className={styles.msgName}>
-                                <div className={styles.avatar}>
-                                    <img src={isUserMsg ? USER_AVATAR : icon} alt="Avatar" />
-                                </div>
-                                {isUserMsg ? '我' : scene}
-                            </div>
-                        )}
-
-                        {/* 消息气泡 */}
-                        <div
-                            className={`${styles.sentence} ${isUserMsg ? styles.user : styles.robot}`}
-                            key={`msg-${index}`}
-                        >
-                            <div className={styles.content}>
-                                {value}
-                                {/* 正在输出时显示打字动画 */}
-                                <div className={styles['loading-wrapper']}>
-                                    {isAIReady &&
-                                    (isUserTextLoading(user) || isAITextLoading(user)) &&
-                                    index === msgHistory.length - 1 ? (
-                                        <Loading gap={3} className={styles.loading} dotClassName={styles.dot} />
-                                    ) : ''}
-                            </div>
-                        </div>
-
-                        {/* 被打断时显示标签 */}
-                        {!isUserMsg && isInterrupted ? (
-                            <Tag className={styles.interruptTag}>已打断</Tag>
-                        ) : ''}
+                        {/* 消息内容 */}
+                        <div className={styles.content}>{sentence.content}</div>
                     </div>
                 );
             })}
+
+            {/* AI 正在回复时显示加载动画 */}
+            {currentInput && !currentInput.definite ? (
+                <div className={`${styles.sentence} ${styles.robot}`}>
+                    <div className={styles.content}>
+                        <div className={styles['loading-wrapper']}>
+                            <HorizonLoading />
+                        </div>
+                    </div>
+                </div>
+            ) : null}
+
+            {/* 字幕模式下显示 AI 正在阅读提示 */}
+            {showSubtitle && !msgHistory.length && !currentConversation ? (
+                <div className={`${styles['aiReadying']}`}>
+                    <div className={styles['aiReading-spin']}>
+                        <HorizonLoading />
+                    </div>
+                    <span>等待对话...</span>
+                </div>
+            ) : null}
         </div>
     );
 }

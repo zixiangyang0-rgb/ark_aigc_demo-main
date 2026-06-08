@@ -41,11 +41,8 @@ function App() {
     return (
         <BrowserRouter>
             <Routes>
-                <Route path="/">
-                    <Route index element={<MainPage />} />
-                    {/* 通配符 /* 捕获所有路径，全部渲染 MainPage */}
-                    <Route path="/*" element={<MainPage />} />
-                </Route>
+                <Route path="/" element={<MainPage />} />
+                <Route path="/*" element={<MainPage />} />
             </Routes>
         </BrowserRouter>
     );

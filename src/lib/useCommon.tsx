@@ -39,32 +39,7 @@
  *
  * 【使用示例】
  *   import { useJoin, useLeave, useDeviceState } from '@/lib/useCommon';
- *
- *   function MeetingRoom() {
- *       // 获取"进入会议室"的操作函数
- *       const [joining, dispatchJoin] = useJoin();
- *       // 获取"离开会议室"的操作函数
- *       const leaveRoom = useLeave();
- *       // 获取设备状态和操作方法
- *       const { isAudioPublished, switchMic } = useDeviceState();
- *
- *       return (
- *           <div>
- *               {/* 点击"进入会议室"按钮 */}
- *               <button onClick={dispatchJoin} disabled={joining}>
- *                   {joining ? '正在进入会议室...' : '进入会议室'}
- *               </button>
- *
- *               {/* 点击"离开会议室"按钮 */}
- *               <button onClick={leaveRoom}>离开会议室</button>
- *
- *               {/* 控制麦克风 */}
- *               <button onClick={switchMic}>
- *                   {isAudioPublished ? '关闭麦克风' : '开启麦克风'}
- *               </button>
- *           </div>
- *       );
- *   }
+ *   // See component examples in project source files
  */
 
 'use strict';
@@ -101,7 +76,7 @@ import VERTC, { MediaType } from '@volcengine/rtc';
 
 // Arco Design 的弹窗组件，用于在会议室出现问题时弹出提示框
 // 就像会议室门口的"电子告示牌"，出现异常时显示警告信息
-import Modal from '@arco-design/web-react';
+import { Modal } from '@arco-design/web-react';
 
 // 自定义的 RTC 客户端封装，这是我们自己的"会议室操作面板"
 // 底层封装了 Volcengine RTC SDK，提供更易用的上层接口
@@ -391,35 +366,8 @@ export const useRTC = () => {
  *   useDeviceState 就是让你能读取这些开关的状态，还能操作它们
  *
  * 【使用示例】
- *   function DeviceControls() {
- *       const {
- *           isAudioPublished,    // 获取麦克风状态
- *           isVideoPublished,    // 获取摄像头状态
- *           isScreenPublished,   // 获取屏幕共享状态
- *           switchMic,           // 获取"切换麦克风"的方法
- *           switchCamera,        // 获取"切换摄像头"的方法
- *           switchScreenCapture, // 获取"切换屏幕共享"的方法
- *       } = useDeviceState();
- *
- *       return (
- *           <div>
- *               {/* 根据麦克风状态显示不同文字 */}
- *               <button onClick={switchMic}>
- *                   {isAudioPublished ? '🔇 关闭麦克风' : '🎤 开启麦克风'}
- *               </button>
- *
- *               {/* 根据摄像头状态显示不同文字 */}
- *               <button onClick={switchCamera}>
- *                   {isVideoPublished ? '📷 关闭摄像头' : '🎥 开启摄像头'}
- *               </button>
- *
- *               {/* 根据屏幕共享状态显示不同文字 */}
- *               <button onClick={switchScreenCapture}>
- *                   {isScreenPublished ? '🛑 停止共享' : '🖥 开始共享'}
- *               </button>
- *           </div>
- *       );
- *   }
+ *   const { isAudioPublished, switchMic } = useDeviceState();
+ *   // See component examples for usage
  */
 export const useDeviceState = () => {
     // 【第一步：读取状态】

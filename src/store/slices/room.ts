@@ -1158,7 +1158,7 @@ export const roomSlice = createSlice({
 
             // 遍历要更新的用户列表
             // 可能一次更新多个人
-            payload.forEach((user) => {
+            payload.forEach((user: any) => {
                 // 找到这个用户在整个 remoteUsers 数组中的索引位置
                 // 在名单上找到这个人的名字在哪一行
                 const findIndex = state.remoteUsers.findIndex((u) => u.userId === user.userId);
@@ -1429,7 +1429,7 @@ export const roomSlice = createSlice({
             // at(-1) 是现代 JS 的写法，等价于 [length-1]
             // || {} 表示如果列表为空，就取一个空对象（避免访问空指针）
             // 为什么要取最后一条？因为要判断是追加还是新开
-            const lastMsg = state.msgHistory.at(-1) || {};
+            const lastMsg = (state.msgHistory.at(-1) || {}) as Msg;
 
 
             // =============================================
