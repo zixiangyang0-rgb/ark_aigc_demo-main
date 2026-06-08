@@ -71,8 +71,8 @@ export default function () {
         // 调用后端 getScenes 接口
         const { scenes }: {
             scenes: {
-                rtc: RTCConfig;      // RTC 配置（AppId、RoomId、UserId、Token）
-                scene: SceneConfig;   // 场景 UI 配置（名称、图标、功能开关）
+                rtc: RTCConfig;
+                scene: SceneConfig;
             }[];
         } = await Apis.Basic.getScenes();
 

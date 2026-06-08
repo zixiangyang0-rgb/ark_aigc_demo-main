@@ -129,9 +129,7 @@ type PromiseRequestFn<T = any> = (params: T) => Promise<any>;
  *   // → { getScenes: (params?) => Promise<ScenesResult> }
  */
 export type Apis<T extends readonly ApiConfig[]> = {
-    [P in ApiNames<T>]: T[number]['method'] extends 'post'
-        ? PromiseRequestFn<T[number]>
-        : RequestFn<T[number]>;
+    [P in ApiNames<T>]: (params?: any) => Promise<any>;
 };
 
 

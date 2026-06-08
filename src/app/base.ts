@@ -93,10 +93,11 @@ export const requestGetMethod = ({
     headers?: Record<string, string>;
 }) => {
     return async (params: Record<string, any> = {}) => {
-        // 拼接 URL：基础地址 + Action参数 + 其他查询参数
-        const url = `${AIGC_PROXY_HOST}?Action=${action}&${Object.keys(params)
-            .map((key) => `${key}=${params[key]}`)
-            .join('&')}`;
+        // 拼接 URL：基础地址 + 路径(action) + 查询参数
+        const queryString = Object.keys(params)
+            .map((key) => `${key}=${encodeURIComponent(params[key])}`)
+            .join('&');
+        const url = `${AIGC_PROXY_HOST}/${action}${queryString ? `?${queryString}` : ''}`;
 
         const res = await fetch(url, {
             headers: {
@@ -263,7 +264,7 @@ export const generateAPIs = <T extends readonly ApiConfig[]>(apiConfigs: T) =>
         const actionKey = action as ApiNames<T>;
 
         // 创建 API 函数
-        store[actionKey] = async (params) => {
+        store[actionKey] = async (params?) => {
             // 根据 method 决定用 GET 还是 POST
             const queryData =
                 method === 'get'

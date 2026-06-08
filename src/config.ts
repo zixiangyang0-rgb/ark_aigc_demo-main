@@ -85,3 +85,7 @@ export enum DeviceType {
     /** 摄像头（编号1） */
     Camera = 1,
 }
+
+export const Disclaimer = '';
+export const ReversoContext = '';
+export const UserAgreement = '';

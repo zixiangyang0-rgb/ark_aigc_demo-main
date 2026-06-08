@@ -24,17 +24,10 @@
 
 'use strict';
 
-import { AigcAPIs, BasicAPIs } from './api';  // 导入 API 配置数组
-import { generateAPIs } from './base';         // 导入 API 生成器
-
-// 根据 BasicAPIs 配置，生成基础 API 函数（getScenes）
-const VoiceChat = generateAPIs(AigcAPIs);    // 根据 AigcAPIs 配置，生成 AI 对话 API 函数
-
-// 根据 BasicAPIs 配置，生成基础 API 函数（getScenes）
-const Basic = generateAPIs(BasicAPIs);
+import { AigcAPI, BasicAPIs } from './api';
 
 // 整合成命名空间导出
 export default {
-    VoiceChat,  // AI 语音对话相关接口：StartVoiceChat、StopVoiceChat
-    Basic,      // 基础接口：getScenes
+    VoiceChat: AigcAPI,
+    Basic: BasicAPIs,
 };

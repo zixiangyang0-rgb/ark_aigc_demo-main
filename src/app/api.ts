@@ -46,14 +46,8 @@ import type { ApiConfig } from './type';  // 导入 API 配置的类型定义
  *   用于从后端获取所有可用场景的配置信息。
  *   这些信息会被存到 Redux 的 sceneConfigMap 和 rtcConfigMap 里。
  */
-const BasicAPIs: ApiConfig[] = [
-    // ===== 基础配置接口 =====
-
-    {
-        action: 'getScenes',   // 获取所有场景配置（最核心的接口之一）
-        method: 'get',         // GET 请求，参数放在 URL 查询字符串里
-        // 没有 apiPath，使用默认路径（/v1/...）
-    },
+const basicApiList: ApiConfig[] = [
+    { action: 'getScenes', method: 'get' },
 ];
 
 
@@ -86,7 +80,7 @@ const BasicAPIs: ApiConfig[] = [
  *   → AI 离开 RTC 房间
  *   → 前端收到 remoteUserLeave 事件（AI 离开了）
  */
-const AigcAPIs: ApiConfig[] = [
+const aigcApiList: ApiConfig[] = [
     {
         action: 'StartVoiceChat',  // 开始 AI 语音对话
         method: 'post',            // POST 请求
@@ -124,7 +118,7 @@ const AigcAPIs: ApiConfig[] = [
  *     getScenes: (params?) => Promise<ScenesResult>
  *   }
  */
-export const BasicAPI = generateAPIs(BasicAPIs);
+export const BasicAPIs = generateAPIs(basicApiList);
 
 /**
  * 【导出】AigcAPIs 生成器
@@ -144,4 +138,4 @@ export const BasicAPI = generateAPIs(BasicAPIs);
  *     InterruptVoiceChat: (params) => Promise<InterruptVoiceChatResult>
  *   }
  */
-export const AigcAPIs = generateAPIs(AigcAPIs);
+export const AigcAPI = generateAPIs(aigcApiList);
