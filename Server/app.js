@@ -117,7 +117,11 @@ app.use(async ctx => {
             switch(Action) {
                 case 'StartVoiceChat':
                     // StartVoiceChat：使用场景配置里的 VoiceChat 作为请求体
-                    body = VoiceChat;
+                    // TaskId 为空时自动生成一个 UUID
+                    body = {
+                        ...VoiceChat,
+                        TaskId: VoiceChat.TaskId || uuid.v4(),
+                    };
                     break;
                 case 'StopVoiceChat':
                     // StopVoiceChat：只需要 AppId、RoomId、TaskId

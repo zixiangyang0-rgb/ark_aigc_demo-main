@@ -104,3 +104,6 @@ log/
 
 # OS
 Thumbs.db
+
+# local temp files
+.git_commit_msg.txt
