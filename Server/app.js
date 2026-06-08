@@ -29,6 +29,8 @@ const bodyParser = require('koa-bodyparser');
 const cors = require('koa2-cors');
 const { Signer } = require('@volcengine/openapi');
 const fetch = require('node-fetch');
+const fs = require('fs');
+const path = require('path');
 const { wrapper, assert, readFiles } = require('./util');
 const TokenManager = require('./token');
 const Privileges = require('./token').privileges;
@@ -42,6 +44,30 @@ const Privileges = require('./token').privileges;
 //   ./scenes/Custom.json → Scenes["Custom"] = {...}
 //   ./scenes/Agent.json  → Scenes["Agent"] = {...}
 const Scenes = readFiles('./scenes', '.json');
+
+// 内存缓存：存储 StartVoiceChat 动态生成的 TaskId（进程级别）
+const TaskIdCache = {};
+
+const TASK_ID_CACHE_FILE = path.join(__dirname, 'taskid-cache.json');
+
+function loadTaskIdCache() {
+    try {
+        const data = fs.readFileSync(TASK_ID_CACHE_FILE, 'utf8');
+        Object.assign(TaskIdCache, JSON.parse(data));
+    } catch (e) {
+        // 文件不存在或解析失败，忽略
+    }
+}
+
+function saveTaskIdCache() {
+    try {
+        fs.writeFileSync(TASK_ID_CACHE_FILE, JSON.stringify(TaskIdCache, null, 2));
+    } catch (e) {
+        console.error('保存 TaskId 缓存失败:', e.message);
+    }
+}
+
+loadTaskIdCache();
 
 
 // ----------
@@ -115,17 +141,21 @@ app.use(async ctx => {
             // 【第5步：根据 Action 构造请求体】
             let body = {};
             switch(Action) {
-                case 'StartVoiceChat':
+                case 'StartVoiceChat': {
                     // StartVoiceChat：使用场景配置里的 VoiceChat 作为请求体
-                    // TaskId 为空时自动生成一个 UUID
+                    // TaskId 为空时自动生成一个 UUID，并缓存供 StopVoiceChat 使用
+                    const taskId = VoiceChat.TaskId || uuid.v4();
+                    TaskIdCache[SceneID] = taskId;
                     body = {
                         ...VoiceChat,
-                        TaskId: VoiceChat.TaskId || uuid.v4(),
+                        TaskId: taskId,
                     };
                     break;
-                case 'StopVoiceChat':
+                }
+                case 'StopVoiceChat': {
                     // StopVoiceChat：只需要 AppId、RoomId、TaskId
-                    const { AppId, RoomId, TaskId } = VoiceChat;
+                    const { AppId, RoomId } = VoiceChat;
+                    const TaskId = VoiceChat.TaskId || TaskIdCache[SceneID];
                     assert(AppId, 'VoiceChat.AppId 不能为空');
                     assert(RoomId, 'VoiceChat.RoomId 不能为空');
                     assert(TaskId, 'VoiceChat.TaskId 不能为空');
@@ -133,6 +163,7 @@ app.use(async ctx => {
                         AppId, RoomId, TaskId
                     };
                     break;
+                }
                 default:
                     // 其他 Action 不做处理
                     break;
@@ -178,7 +209,19 @@ app.use(async ctx => {
                 headers: openApiRequestData.headers,
                 body: JSON.stringify(body),
             });
-            return result.json();
+            const resultJson = await result.json();
+
+            // 缓存持久化：TaskId 写入文件，重启后仍可用
+            if (Action === 'StartVoiceChat' && resultJson.Result) {
+                TaskIdCache[SceneID] = body.TaskId;
+                saveTaskIdCache();
+            }
+            if (Action === 'StopVoiceChat') {
+                delete TaskIdCache[SceneID];
+                saveTaskIdCache();
+            }
+
+            return resultJson;
         }
     });
 
